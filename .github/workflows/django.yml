@@ -31,7 +31,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install -r requirements.txt || true
+          pip install psycopg2-binary==2.9.10
+
+      - name: Show installed packages (debug)
+        run: pip freeze
 
       - name: Create .env for CI
         run: |
@@ -43,6 +47,12 @@ jobs:
           echo "DATABASE_HOST=localhost" >> .env
           echo "DATABASE_PORT=5432" >> .env
 
-      - name: Run tests
+      - name: Wait for PostgreSQL to be ready
         run: |
-          python manage.py test
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 1
+          done
+
+      - name: Run tests
+        run: python manage.py test
