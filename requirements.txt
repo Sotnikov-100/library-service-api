@@ -11,3 +11,21 @@ platformdirs==4.3.8
 psycopg2-binary==2.9.10
 python-dotenv==1.1.0
 sqlparse==0.5.3
+
+#telegram bot dependencies
+python-telegram-bot>=22.1
+
+# dependencies for development
+celery>=5.5.2
+django-celery-beat>=2.8.1
+django-celery-results>=2.6.0
+django-debug-toolbar>=5.2.0
+django-filter>=25.1
+django-redis>=5.4.0
+django-stubs[compatible-mypy]>=5.2.0
+djangorestframework-simplejwt>=5.5.0
+drf-spectacular>=0.28.0
+gunicorn>=23.0.0
+markdown>=3.8
+redis>=6.1.0
+ruff>=0.11.9
