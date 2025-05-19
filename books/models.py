@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.text import slugify
 
 
-def book_image_file_path(instance, filename):
+def book_image_file_path(instance: "Book", filename: str) -> str:
     _, extension = os.path.splitext(filename)
     filename = f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
 
@@ -20,5 +20,5 @@ class Book(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to=book_image_file_path)
     authors = models.ManyToManyField("Author", through="BookAuthor", related_name="books")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
