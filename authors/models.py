@@ -1,7 +1,5 @@
 from django.db import models
 
-from books.models import Book
-
 
 class Author(models.Model):
     first_name = models.CharField(max_length=150)
@@ -15,14 +13,14 @@ class Author(models.Model):
 
 
 class BookAuthor(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="authors")
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
+    book = models.ForeignKey("books.Book", on_delete=models.CASCADE, related_name="book_authors")
+    author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="author_books")
 
     class Meta:
+        unique_together = ("book", "author")
         indexes = [
             models.Index(fields=["book", "author"]),
         ]
-        unique_together = ("book", "author")
 
     def __str__(self):
         return f"{self.author} -> {self.book}"
