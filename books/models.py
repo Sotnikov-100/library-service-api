@@ -3,6 +3,7 @@ import uuid
 
 from django.db import models
 from django.utils.text import slugify
+from authors.models import Author, BookAuthor
 
 
 def book_image_file_path(instance: "Book", filename: str) -> str:
