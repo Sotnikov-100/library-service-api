@@ -13,9 +13,7 @@ class Author(models.Model):
 
 
 class BookAuthor(models.Model):
-    book = models.ForeignKey(
-        "books.Book", on_delete=models.CASCADE, related_name="authors"
-    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="authors")
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
 
     class Meta:
