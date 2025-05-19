@@ -27,32 +27,32 @@ services:
     restart: always
 
 # Async tasks
-#  celery:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    container_name: social-celery
-#    command: celery -A config worker -l info
-#    env_file:
-#      - .env
-#    depends_on:
-#      social_db:
-#        condition: service_healthy
-#    restart: always
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library-celery
+    command: celery -A config worker -l info
+    env_file:
+      - .env
+    depends_on:
+      library_db:
+        condition: service_healthy
+    restart: always
 
 # Periodic tasks
-#  celery_beat:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    container_name: social-celery-beat
-#    command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-#    env_file:
-#      - .env
-#    depends_on:
-#      social_db:
-#        condition: service_healthy
-#    restart: always
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library-celery-beat
+    command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - .env
+    depends_on:
+      library_db:
+        condition: service_healthy
+    restart: always
 
   nginx:
     image: nginx:alpine
@@ -84,30 +84,31 @@ services:
     restart: always
 
 # Cache Service
-#  redis:
-#    image: redis:latest
-#    ports:
-#      - "6379:6379"
-#    volumes:
-#      - redis_data:/data
-#    restart: always
-#    healthcheck:
-#      test: [ "CMD", "redis-cli", "ping" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#
-#  redisinsight:
-#    image: redislabs/redisinsight:latest
-#    ports:
-#      - "5540:5540"
-#    depends_on:
-#      - redis
-#    restart:
-#      always
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# RedisInsight
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+    restart:
+      always
 
 volumes:
   library_db:
 #  library_media:
 #  library_static:
-#  redis_data:
+  redis_data:
