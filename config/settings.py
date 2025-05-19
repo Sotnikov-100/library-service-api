@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "payments",
     "notifications",
     "authors",
+    "tgaccounts",
 ]
 
 MIDDLEWARE = [
@@ -146,9 +147,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # debug toolbar settings
 INTERNAL_IPS = ["127.0.0.1", "172.17.0.1", *[f"172.18.0.{i}" for i in range(1, 20)]]
 
+TELEGRAM_BOT_NAME = os.getenv("TELEGRAM_BOT_NAME", "default_bot_name")
+TELEGRAM_API_TOKEN = os.getenv("TELEGRAM_API_TOKEN", "default_token")
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     )
 }
 

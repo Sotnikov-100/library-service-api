@@ -20,7 +20,9 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
     path("api/v1/", include("authors.urls", namespace="authors")),
+    path("api/v1/", include("tgaccounts.urls", namespace="tgaccounts")),
     path("__debug__/", include("debug_toolbar.urls")),
     path("api/v1/users/", include("users.urls", namespace="users")),
 ]
