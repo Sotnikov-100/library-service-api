@@ -141,8 +141,4 @@ MEDIA_ROOT = "/files/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # debug toolbar settings
-INTERNAL_IPS = [
-    "127.0.0.1",
-    "172.17.0.1",
-    *[f"172.18.0.{i}" for i in range(1, 20)]
-]
+INTERNAL_IPS = ["127.0.0.1", "172.17.0.1", *[f"172.18.0.{i}" for i in range(1, 20)]]
