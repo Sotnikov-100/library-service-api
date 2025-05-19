@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
-from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -115,8 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "user.User"
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -145,15 +142,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # debug toolbar settings
 INTERNAL_IPS = ["127.0.0.1", "172.17.0.1", *[f"172.18.0.{i}" for i in range(1, 20)]]
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-       "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
-    "ROTATE_REFRESH_TOKENS": True,
-}
