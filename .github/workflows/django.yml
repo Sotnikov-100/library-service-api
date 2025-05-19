@@ -11,8 +11,8 @@ jobs:
         image: postgres:15
         env:
           POSTGRES_DB: library_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: admin_library
+          POSTGRES_PASSWORD: password123
         ports:
           - 5432:5432
         options: >-
@@ -20,6 +20,15 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+    env:
+      POSTGRES_DB: library_db
+      POSTGRES_USER: admin_library
+      POSTGRES_PASSWORD: password123
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      DEBUG: "True"
+      SECRET_KEY: test-key-for-ci
 
     steps:
       - uses: actions/checkout@v3
@@ -31,28 +40,19 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt || true
-          pip install psycopg2-binary==2.9.10
-
-      - name: Show installed packages (debug)
-        run: pip freeze
-
-      - name: Create .env for CI
-        run: |
-          echo "DEBUG=True" >> .env
-          echo "SECRET_KEY=test-key" >> .env
-          echo "DATABASE_NAME=library_db" >> .env
-          echo "DATABASE_USER=postgres" >> .env
-          echo "DATABASE_PASSWORD=postgres" >> .env
-          echo "DATABASE_HOST=localhost" >> .env
-          echo "DATABASE_PORT=5432" >> .env
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install psycopg2-binary python-dotenv
 
       - name: Wait for PostgreSQL to be ready
         run: |
-          until pg_isready -h localhost -p 5432 -U postgres; do
+          until pg_isready -h localhost -p 5432 -U $POSTGRES_USER; do
             echo "Waiting for PostgreSQL..."
             sleep 1
           done
+
+      - name: Run migrations
+        run: python manage.py migrate
 
       - name: Run tests
         run: python manage.py test
