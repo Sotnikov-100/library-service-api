@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-# from borrowings.models import Borrowing
 
 
 class PaymentStatus(models.TextChoices):
@@ -15,7 +14,7 @@ class PaymentType(models.TextChoices):
 
 class Payment(models.Model):
     borrowing = models.ForeignKey(
-        "Borrowing",
+        "borrowings.Borrowing",
         on_delete=models.PROTECT,
         related_name="payments"
     )
