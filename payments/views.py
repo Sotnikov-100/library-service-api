@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.exceptions import PermissionDenied
 from payments.models import Payment
 from payments.serializers import PaymentSerializer
-from payments.permissions import IsAdminOrOwner, IsAdminOrReadOnly
+from payments.permissions import IsAdminOrOwner
 from payments.services import create_stripe_session
 
 
