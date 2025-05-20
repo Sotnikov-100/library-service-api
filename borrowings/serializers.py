@@ -5,15 +5,18 @@ from rest_framework.exceptions import ValidationError
 
 from books.models import Book
 from borrowings.models import Borrowing
+from payments.models import Payment, PaymentStatus
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
-        if attrs["expected_return_date"] <=attrs["borrow_date"]:
-            raise ValidationError({
-                "expected_return_date": "Expected return date must "
-                "be greater than borrow date."
-            })
+        if attrs["expected_return_date"] <= attrs["borrow_date"]:
+            raise ValidationError(
+                {
+                    "expected_return_date": "Expected return date must "
+                    "be greater than borrow date."
+                }
+            )
         return attrs
 
     class Meta:
@@ -34,6 +37,7 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         queryset=Book.objects.all(),
         many=False,
     )
+
     class Meta:
         model = Borrowing
         fields = (
@@ -52,16 +56,28 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         return borrowing
 
     def validate(self, attrs):
-        if attrs["expected_return_date"] <=attrs["borrow_date"]:
-            raise ValidationError({
-                "expected_return_date": "Expected return date must "
-                "be greater than borrow date."
-            })
+        if attrs["expected_return_date"] <= attrs["borrow_date"]:
+            raise ValidationError(
+                {
+                    "expected_return_date": "Expected return date must "
+                    "be greater than borrow date."
+                }
+            )
 
         if attrs["book"].inventory <= 0:
-            raise ValidationError({
-                "book inventory": "Book inventory must be greater than 0."
-            })
+            raise ValidationError(
+                {"book inventory": "Book inventory must be greater than 0."}
+            )
+
+        user = self.context["request"].user
+        if Payment.objects.filter(
+            borrowing__user=user, status=PaymentStatus.PENDING
+        ).exists():
+            raise ValidationError(
+                {
+                    "pending_payments": "You have pending payments. Cannot create a new borrowing."
+                }
+            )
 
         return attrs
 
@@ -79,17 +95,41 @@ class BorrowingReturnUpdateSerializer(serializers.ModelSerializer):
             raise ValidationError("This borrowing has already been required.")
         actual_return_date = attrs.get("actual_return_date")
         if actual_return_date and actual_return_date <= self.instance.borrow_date:
-            raise ValidationError({
-                "actual_return_date": "Return date must be after borrow date."
-            })
+            raise ValidationError(
+                {"actual_return_date": "Return date must be after borrow date."}
+            )
 
         return attrs
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        instance.actual_return_date = validated_data.get("actual_return_date", timezone.now().date())
+        instance.actual_return_date = validated_data.get(
+            "actual_return_date", timezone.now().date()
+        )
         instance.book.inventory += 1
         instance.book.save(update_fields=["inventory"])
         instance.save(update_fields=["actual_return_date"])
 
         return instance
+
+
+class BorrowingRetrieveSerializer(serializers.ModelSerializer):
+    book_title = serializers.CharField(source="book.title", read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+    expired_days = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Borrowing
+        fields = [
+            "id",
+            "user",
+            "book",
+            "book_title",
+            "borrow_date",
+            "expected_return_date",
+            "actual_return_date",
+            "is_active",
+            "is_expired",
+            "expired_days",
+        ]
+        read_only_fields = ["id", "user", "book"]

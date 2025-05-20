@@ -7,7 +7,7 @@ from borrowings.pagiantion import BorrowingSetPagination
 from borrowings.serializers import (
     BorrowingSerializer,
     BorrowingCreateSerializer,
-    BorrowingReturnUpdateSerializer
+    BorrowingReturnUpdateSerializer,
 )
 
 
@@ -46,17 +46,20 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_serializer_class(self):
-        serializer = self.serializer_class
         if self.action == "list":
-            serializer = BorrowingSerializer
+            return BorrowingSerializer
 
         if self.action == "create":
             return BorrowingCreateSerializer
 
         if self.action in ("update", "partial_update"):
             return BorrowingReturnUpdateSerializer
+        return self.serializer_class
 
-        return serializer
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
 
     @action(detail=True, methods=["post"], url_path="return")
     def return_borrowing(self, request, pk=None):
