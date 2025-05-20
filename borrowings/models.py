@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from rest_framework.exceptions import ValidationError
 
@@ -35,6 +37,10 @@ class Borrowing(models.Model):
     @property
     def is_active(self: "Borrowing") -> bool:
         return self.actual_return_date is None
+
+    @property
+    def is_expired(self: "Borrowing") -> bool:
+        return self.actual_return_date > datetime.date.today()
 
     class Meta:
         ordering = ["actual_return_date", "expected_return_date"]
