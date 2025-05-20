@@ -64,11 +64,10 @@ def create_payment_for_borrowing(borrowing: Borrowing) -> Payment:
 
 @transaction.atomic
 def create_fine_payment(borrowing: Borrowing) -> Payment:
-    if borrowing.actual_return_date <= borrowing.expected_return_date:
+    if not borrowing.is_expired:
         return None
 
-    days_overdue = (borrowing.actual_return_date - borrowing.expected_return_date).days
-    fine_amount = borrowing.book.daily_fee * days_overdue * FINE_MULTIPLIER
+    fine_amount = borrowing.calculate_fine_amount(FINE_MULTIPLIER)
 
     payment = Payment.objects.create(
         borrowing=borrowing, money_to_pay=fine_amount, type=PaymentType.FINE
