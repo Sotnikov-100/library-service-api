@@ -2,7 +2,11 @@ from rest_framework import viewsets
 
 from borrowings.models import Borrowing
 from borrowings.pagiantion import BorrowingSetPagination
-from borrowings.serializers import BorrowingSerializer, BorrowingListSerializer, BorrowingCreateSerializer
+from borrowings.serializers import (
+    BorrowingSerializer,
+    BorrowingListSerializer,
+    BorrowingCreateSerializer,
+)
 
 
 class BorrowingViewSet(viewsets.ModelViewSet):
@@ -20,11 +24,13 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_serializer_class(self):
-        serializer = self.serializer_class
         if self.action == "list":
-            serializer = BorrowingListSerializer
-
-        if self.action is "create":
+            return BorrowingListSerializer
+        if self.action == "create":
             return BorrowingCreateSerializer
+        return self.serializer_class
 
-        return serializer
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
