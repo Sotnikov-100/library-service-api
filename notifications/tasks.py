@@ -1,11 +1,13 @@
+import asyncio
+import logging
+
 from celery import shared_task
 from django.contrib.auth import get_user_model
 from django.db import transaction
+
 from notifications.models import Notification
 from notifications.telegram_bot import TelegramNotification
 from tgaccounts.models import TelegramAccount
-import logging
-import asyncio
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -86,9 +88,7 @@ def send_notification_to_all_users(message):
 
             # Only create notification record if message was sent
             if success:
-                Notification.objects.create(
-                    user=user, message=message, is_sent=True
-                )
+                Notification.objects.create(user=user, message=message, is_sent=True)
                 notification_count += 1
 
         return notification_count
@@ -160,7 +160,7 @@ def delete_telegram_account_task(self, chat_id):
         with transaction.atomic():
             account = TelegramAccount.objects.get(chat_id=chat_id)
             user = account.user
-            
+
             # Send notification directly through bot before deletion
             notifier = TelegramNotification()
             try:
@@ -168,7 +168,7 @@ def delete_telegram_account_task(self, chat_id):
             except RuntimeError:
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
-            
+
             message = f"👋 Your Telegram account has been unlinked from {user.email}. You will no longer receive notifications."
             success = loop.run_until_complete(
                 notifier.send_notification(
@@ -176,13 +176,11 @@ def delete_telegram_account_task(self, chat_id):
                     chat_id=chat_id,
                 )
             )
-            
+
             # Create notification record with correct status
             if success:
-                Notification.objects.create(
-                    user=user, message=message, is_sent=True
-                )
-            
+                Notification.objects.create(user=user, message=message, is_sent=True)
+
             # Delete the account
             account.delete()
             return True
@@ -218,9 +216,7 @@ def create_notification_task(user_id, message):
 
         # Only create notification record if message was sent
         if success:
-            Notification.objects.create(
-                user=user, message=message, is_sent=True
-            )
+            Notification.objects.create(user=user, message=message, is_sent=True)
             return True
         return False
     except Exception as e:
@@ -246,8 +242,9 @@ def cleanup_old_notifications():
     """Remove notifications older than 30 days."""
     try:
         from datetime import timedelta
+
         from django.utils import timezone
-        
+
         # Delete notifications older than 30 days
         old_date = timezone.now() - timedelta(days=30)
         deleted_count = Notification.objects.filter(created_at__lt=old_date).delete()[0]

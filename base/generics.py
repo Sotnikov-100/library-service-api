@@ -1,4 +1,3 @@
-from typing import Optional, Type
 
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework import generics
@@ -14,8 +13,8 @@ from base.mixins import (
 
 
 class GenericAPIView(generics.GenericAPIView):
-    request_serializer_class: Optional[Type[BaseSerializer]] = None
-    response_serializer_class: Optional[Type[BaseSerializer]] = None
+    request_serializer_class: type[BaseSerializer] | None = None
+    response_serializer_class: type[BaseSerializer] | None = None
 
     def get_request_serializer(self, *args, **kwargs) -> BaseSerializer:
         serializer = self.get_request_serializer_or_none(*args, **kwargs)
@@ -25,14 +24,14 @@ class GenericAPIView(generics.GenericAPIView):
 
     def get_request_serializer_or_none(
         self, *args, **kwargs
-    ) -> Optional[BaseSerializer]:
+    ) -> BaseSerializer | None:
         serializer_class = self.get_request_serializer_class_or_none()
         if serializer_class is not None:
             kwargs.setdefault("context", self.get_request_serializer_context())
             return serializer_class(*args, **kwargs)
         return None
 
-    def get_request_serializer_class_or_none(self) -> Optional[Type[BaseSerializer]]:
+    def get_request_serializer_class_or_none(self) -> type[BaseSerializer] | None:
         return self.request_serializer_class
 
     def get_request_serializer_context(self):
@@ -52,14 +51,14 @@ class GenericAPIView(generics.GenericAPIView):
 
     def get_response_serializer_or_none(
         self, *args, **kwargs
-    ) -> Optional[BaseSerializer]:
+    ) -> BaseSerializer | None:
         serializer_class = self.get_response_serializer_class_or_none()
         if serializer_class is not None:
             kwargs.setdefault("context", self.get_response_serializer_context())
             return serializer_class(*args, **kwargs)
         return None
 
-    def get_response_serializer_class_or_none(self) -> Optional[Type[BaseSerializer]]:
+    def get_response_serializer_class_or_none(self) -> type[BaseSerializer] | None:
         return self.response_serializer_class
 
     def get_response_serializer_context(self):
@@ -71,7 +70,7 @@ class GenericAPIView(generics.GenericAPIView):
             "`response_serializer_class` attribute"
         )
 
-    def get_serializer_class(self) -> Optional[Type[BaseSerializer]]:
+    def get_serializer_class(self) -> type[BaseSerializer] | None:
         response_serializer_class = self.get_response_serializer_class_or_none()
 
         if response_serializer_class is not None:

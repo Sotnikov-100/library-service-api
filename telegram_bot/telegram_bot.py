@@ -1,25 +1,24 @@
-import os
 import logging
+import os
+
 from asgiref.sync import sync_to_async
 from telegram import BotCommand, Update
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
     ContextTypes,
+    ConversationHandler,
     MessageHandler,
     filters,
-    ConversationHandler,
 )
 
-from tgaccounts.models import TelegramAccount
 from notifications.tasks import (
-    send_notification_task,
-    create_telegram_account_task,
-    delete_telegram_account_task,
-    create_notification_task,
     check_telegram_account_task,
     check_user_exists_task,
+    create_telegram_account_task,
+    delete_telegram_account_task,
 )
+from tgaccounts.models import TelegramAccount
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -1,14 +1,15 @@
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-from django.db import transaction
-import logging
 import asyncio
+import logging
+
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 
 from borrowings.models import Borrowing
 from notifications.models import Notification
-from tgaccounts.models import TelegramAccount
-from notifications.tasks import send_notification_task, create_notification_task
+from notifications.tasks import create_notification_task, send_notification_task
 from notifications.telegram_bot import TelegramNotification
+from payments.models import Payment
+from tgaccounts.models import TelegramAccount
 
 logger = logging.getLogger(__name__)
 
@@ -117,23 +118,21 @@ def borrowing_post_save(sender, instance, created, **kwargs):
         logger.error(f"Critical error in borrowing_post_save: {str(e)}")
 
 
-# @receiver(post_save, sender=Payment)
-# def payment_post_save(sender, instance, created, **kwargs):
-#     try:
-#         if not hasattr(instance.user, 'telegram_account'):
-#             return
-#
-#         if created:
-#             message = f"New payment: {instance}"
-#         else:
-#             message = f"Payment updated: {instance}"
-#
-#         notification = Notification.objects.create(
-#             user=instance.user,
-#             message=message,
-#             is_sent=False
-#         )
-#         send_notification_task.delay(notification.id)
-#
-#     except Exception as e:
-#         logger.error(f"Error in payment_post_save: {str(e)}")
+@receiver(post_save, sender=Payment)
+def payment_post_save(sender, instance, created, **kwargs):
+    try:
+        if not hasattr(instance.user, "telegram_account"):
+            return
+
+        if created:
+            message = f"New payment: {instance}"
+        else:
+            message = f"Payment updated: {instance}"
+
+        notification = Notification.objects.create(
+            user=instance.user, message=message, is_sent=False
+        )
+        send_notification_task.delay(notification.id)
+
+    except Exception as e:
+        logger.error(f"Error in payment_post_save: {str(e)}")

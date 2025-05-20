@@ -1,4 +1,4 @@
-from typing import Dict, Iterable, Optional, Type, Union
+from collections.abc import Iterable
 
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework import viewsets
@@ -16,11 +16,9 @@ from base.mixins import (
 
 
 class GenericViewSet(viewsets.ViewSetMixin, GenericAPIView):
-    action_permission_classes: Optional[
-        Dict[str, Union[Type[BasePermission], Iterable[Type[BasePermission]]]]
-    ] = None
-    request_action_serializer_classes: Optional[Dict[str, Type[BaseSerializer]]] = None
-    response_action_serializer_classes: Optional[Dict[str, Type[BaseSerializer]]] = None
+    action_permission_classes: dict[str, type[BasePermission] | Iterable[type[BasePermission]]] | None = None
+    request_action_serializer_classes: dict[str, type[BaseSerializer]] | None = None
+    response_action_serializer_classes: dict[str, type[BaseSerializer]] | None = None
 
     def get_permission_classes_or_none(self):
         if self.action_permission_classes:
@@ -46,7 +44,7 @@ class GenericViewSet(viewsets.ViewSetMixin, GenericAPIView):
 
         return permissions or super().get_permissions()
 
-    def get_request_serializer_class_or_none(self) -> Optional[Type[BaseSerializer]]:
+    def get_request_serializer_class_or_none(self) -> type[BaseSerializer] | None:
         serializer_class = None
 
         if self.request_action_serializer_classes:
@@ -65,7 +63,7 @@ class GenericViewSet(viewsets.ViewSetMixin, GenericAPIView):
             "`request_action_serializer_classes` attribute"
         )
 
-    def get_response_serializer_class_or_none(self) -> Optional[Type[BaseSerializer]]:
+    def get_response_serializer_class_or_none(self) -> type[BaseSerializer] | None:
         serializer_class = None
 
         if self.response_action_serializer_classes:
