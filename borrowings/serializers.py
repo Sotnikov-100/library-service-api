@@ -98,17 +98,41 @@ class BorrowingReturnUpdateSerializer(serializers.ModelSerializer):
             raise ValidationError("This borrowing has already been required.")
         actual_return_date = attrs.get("actual_return_date")
         if actual_return_date and actual_return_date <= self.instance.borrow_date:
-            raise ValidationError({
-                "actual_return_date": "Return date must be after borrow date."
-            })
+            raise ValidationError(
+                {"actual_return_date": "Return date must be after borrow date."}
+            )
 
         return attrs
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        instance.actual_return_date = validated_data.get("actual_return_date", timezone.now().date())
+        instance.actual_return_date = validated_data.get(
+            "actual_return_date", timezone.now().date()
+        )
         instance.book.inventory += 1
         instance.book.save(update_fields=["inventory"])
         instance.save(update_fields=["actual_return_date"])
 
         return instance
+
+
+class BorrowingRetrieveSerializer(serializers.ModelSerializer):
+    book_title = serializers.CharField(source="book.title", read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+    expired_days = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Borrowing
+        fields = [
+            "id",
+            "user",
+            "book",
+            "book_title",
+            "borrow_date",
+            "expected_return_date",
+            "actual_return_date",
+            "is_active",
+            "is_expired",
+            "expired_days",
+        ]
+        read_only_fields = ["id", "user", "book"]
