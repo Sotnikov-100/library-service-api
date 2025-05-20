@@ -27,4 +27,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         if self.action is "create":
             return BorrowingCreateSerializer
 
+        if self.action is ["update", "partial_update"]:
+            return BorrowingUpdateSerializer
+
         return serializer
