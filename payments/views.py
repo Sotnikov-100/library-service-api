@@ -1,31 +1,68 @@
-from rest_framework import viewsets, permissions
+import stripe
+import os
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
-from payments.models import Payment
+from rest_framework.response import Response
+
+from payments.models import Payment, PaymentStatus
 from payments.serializers import PaymentSerializer
 from payments.permissions import IsAdminOrOwner
-from payments.services import create_stripe_session
+from payments.services import create_stripe_session, send_telegram_notification
+
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 
 class PaymentViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.all()
+    queryset = Payment.objects.all().select_related(
+        "borrowing__user", "borrowing__book"
+    )
     serializer_class = PaymentSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_permissions(self):
-        if self.action == "retrieve":
-            return [permissions.IsAuthenticated(), IsAdminOrOwner()]
-        elif self.action in ["update", "partial_update"]:
-            return [permissions.IsAuthenticated(), permissions.IsAdminUser()]
-        elif self.action == "destroy":
-            raise PermissionDenied("Deleting payments is not allowed.")
-        return super().get_permissions()
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrOwner]
 
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            return Payment.objects.all()
-        return Payment.objects.filter(borrowing__user=user)
+            return self.queryset
+        return self.queryset.filter(borrowing__user=user)
 
     def perform_create(self, serializer):
         payment = serializer.save()
-        create_stripe_session(payment)
+        create_stripe_session(payment, self.request)
+        return payment
+
+    @action(detail=True, methods=["GET"], url_path="success")
+    def payment_success(self, request, pk=None):
+        payment = self.get_object()
+        try:
+            session = stripe.checkout.Session.retrieve(payment.session_id)
+            if session.payment_status == "paid":
+                payment.status = PaymentStatus.PAID
+                payment.save()
+                send_telegram_notification(payment)
+                return Response(
+                    {"status": "success", "message": "Payment completed successfully!"}
+                )
+            return Response(
+                {"status": "pending", "message": "Payment is still pending."},
+                status=status.HTTP_202_ACCEPTED,
+            )
+        except stripe.error.StripeError as e:
+            return Response(
+                {"status": "error", "message": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    @action(detail=True, methods=["GET"], url_path="cancel")
+    def payment_cancel(self, request, pk=None):
+        return Response(
+            {
+                "status": "cancelled",
+                "message": "Payment was cancelled. You can complete it later.",
+                "payment_url": self.get_object().session_url,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        raise PermissionDenied("Deleting payments is not allowed.")
