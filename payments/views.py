@@ -66,3 +66,13 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         raise PermissionDenied("Deleting payments is not allowed.")
+
+    @action(detail=True, methods=["POST"])
+    def renew_session(self, request, pk=None):
+        payment = self.get_object()
+        if payment.status != PaymentStatus.EXPIRED:
+            return Response(
+                {"error": "Only expired payments can be renewed."}, status=400
+            )
+        create_stripe_session(payment, request)
+        return Response({"session_url": payment.session_url})
