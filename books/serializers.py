@@ -19,17 +19,6 @@ class BookSerializer(serializers.ModelSerializer):
             "authors"
         )
 
-    def validate_daily_fee(self, value):
-        if value < 0:
-            raise serializers.ValidationError("Daily Fee must be greater than 0")
-        return value
-
-    def validate_inventory(self, value):
-        if value < 0:
-            raise serializers.ValidationError("Inventory must be greater than 0")
-        return value
-
-
 
 class BookCreateUpdateSerializer(serializers.ModelSerializer):
     authors = serializers.PrimaryKeyRelatedField(
@@ -47,11 +36,21 @@ class BookCreateUpdateSerializer(serializers.ModelSerializer):
             "authors"
         )
 
+    def validate_daily_fee(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Daily Fee must be greater than 0")
+        return value
+
+    def validate_inventory(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Inventory must be greater than 0")
+        return value
+
     def create(self, validated_data):
         authors = validated_data.pop("authors")
         book = Book.objects.create(**validated_data)
         for author in authors:
-            author.books.create(book=book, author=author)
+            BookAuthor.objects.create(book=book, author=author)
         return book
 
     def update(self, instance, validated_data):

@@ -1,13 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from authors.views import AuthorViewSet
-
+from payments.views import PaymentViewSet
 
 router = DefaultRouter()
-router.register(r"", AuthorViewSet)
+router.register(r"", PaymentViewSet, basename="payments")
 
 urlpatterns = [
     path("", include(router.urls)),
 ]
 
-app_name = "authors"
+app_name = "payments"
