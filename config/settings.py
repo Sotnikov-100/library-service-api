@@ -158,8 +158,6 @@ TELEGRAM_API_TOKEN = os.getenv("TELEGRAM_API_TOKEN", "default_token")
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "base.openapi.RequestResponseAutoSchema",
