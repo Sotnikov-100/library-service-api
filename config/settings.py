@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party apps
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "debug_toolbar",
     # local apps
     "books",
@@ -154,6 +155,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
+    "AUTH_HEADER_NAME": "HTTP_X_ACCESS_TOKEN",
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
     "ROTATE_REFRESH_TOKENS": True,
