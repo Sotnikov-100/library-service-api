@@ -65,7 +65,7 @@ def telegram_account_receiver(sender, instance, **kwargs):
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
 
-                message = f"📱 Your Telegram account has been updated for {instance.user.email}.\nYour bind token: {instance.bind_token}"
+                message = f"Your Telegram account has been updated for {instance.user.email}.\nYour bind token: {instance.bind_token}"
                 success = loop.run_until_complete(
                     notifier.send_notification(
                         message=message,
@@ -87,7 +87,7 @@ def telegram_account_receiver(sender, instance, **kwargs):
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
 
-            message = f"👋 Your Telegram account has been unlinked from {instance.user.email}. You will no longer receive notifications."
+            message = f"Your Telegram account has been unlinked from {instance.user.email}. You will no longer receive notifications."
             success = loop.run_until_complete(
                 notifier.send_notification(
                     message=message,
@@ -112,7 +112,7 @@ def borrowing_post_save(sender, instance, created, **kwargs):
             return
 
         message = (
-            f"{'📚 New' if created else '📖 Updated'} borrowing:\n"
+            f"{'New' if created else ' Updated'} borrowing:\n"
             f"Book: {instance.book.title}\n"
             f"Borrow date: {instance.borrow_date}\n"
             f"Expected return: {instance.expected_return_date}"
@@ -131,7 +131,7 @@ def payment_post_save(sender, instance, created, **kwargs):
             return
 
         message = (
-            f"{'💰 New' if created else '💳 Updated'} payment:\n"
+            f"{' New' if created else '💳 Updated'} payment:\n"
             f"Amount: ${instance.money_to_pay}\n"
             f"Status: {instance.status}\n"
             f"Type: {instance.type}\n"
