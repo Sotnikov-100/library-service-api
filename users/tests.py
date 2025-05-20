@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
+
 class UserRegistrationTests(APITestCase):
     def setUp(self):
         self.client = APIClient()
@@ -26,7 +27,9 @@ class UserRegistrationTests(APITestCase):
     def test_user_can_register_with_valid_data(self):
         response = self.client.post(self.url, self.data_user_1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(User.objects.filter(email="newuser@example.com").exists())
+        self.assertTrue(
+            User.objects.filter(email="newuser@example.com").exists()
+        )
 
     def test_user_cannot_register_with_missing_fields(self):
         data = self.data_user_1.copy()
@@ -56,39 +59,46 @@ class UserLoginTests(APITestCase):
         User.objects.create_user(**self.data_user_1)
 
     def test_user_can_login_with_valid_credentials(self):
-        response = self.client.post(reverse("users:token_obtain_pair"), {
-            "email": self.data_user_1["email"],
-            "password": self.data_user_1["password"]
-        })
+        response = self.client.post(
+            reverse("users:token_obtain_pair"),
+            {
+                "email": self.data_user_1["email"],
+                "password": self.data_user_1["password"],
+            },
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("access", response.data)
         self.assertIn("refresh", response.data)
 
     def test_user_cannot_login_with_invalid_credentials(self):
-        response = self.client.post(reverse("users:token_obtain_pair"), {
-            "email": self.data_user_1["email"],
-            "password": "wrongpassword"
-        })
+        response = self.client.post(
+            reverse("users:token_obtain_pair"),
+            {"email": self.data_user_1["email"], "password": "wrongpassword"},
+        )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_user_refresh_access_token(self):
-        login_response = self.client.post(reverse("users:token_obtain_pair"), {
-            "email": self.data_user_1["email"],
-            "password": self.data_user_1["password"]
-        })
+        login_response = self.client.post(
+            reverse("users:token_obtain_pair"),
+            {
+                "email": self.data_user_1["email"],
+                "password": self.data_user_1["password"],
+            },
+        )
         refresh_token = login_response.data["refresh"]
 
-        refresh_response = self.client.post(reverse("users:token_refresh"), {
-            "refresh": refresh_token
-        })
+        refresh_response = self.client.post(
+            reverse("users:token_refresh"), {"refresh": refresh_token}
+        )
         self.assertEqual(refresh_response.status_code, status.HTTP_200_OK)
         self.assertIn("access", refresh_response.data)
 
     def test_user_cannot_refresh_access_token_with_invalid_token(self):
-        response = self.client.post(reverse("users:token_refresh"), {
-            "refresh": "invalidtoken"
-        })
+        response = self.client.post(
+            reverse("users:token_refresh"), {"refresh": "invalidtoken"}
+        )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class ManageUserViewTests(APITestCase):
     def setUp(self):
@@ -102,7 +112,9 @@ class ManageUserViewTests(APITestCase):
 
     def authenticate(self):
         refresh = RefreshToken.for_user(self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(refresh.access_token)}")
+        self.client.credentials(
+            HTTP_AUTHORIZATION=f"Bearer {str(refresh.access_token)}"
+        )
 
     def test_authenticated_user_can_retrieve_own_profile(self):
         self.authenticate()
@@ -114,4 +126,3 @@ class ManageUserViewTests(APITestCase):
     def test_unauthenticated_user_cannot_access_profile(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
