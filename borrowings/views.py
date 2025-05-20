@@ -1,12 +1,11 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-
+from django.db.models import BooleanField, ExpressionWrapper, Q
 from borrowings.models import Borrowing
 from borrowings.pagiantion import BorrowingSetPagination
 from borrowings.serializers import (
     BorrowingSerializer,
-    BorrowingListSerializer,
     BorrowingCreateSerializer,
     BorrowingReturnUpdateSerializer,
 )
@@ -18,18 +17,41 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     pagination_class = BorrowingSetPagination
 
     def get_queryset(self):
+        queryset = self.queryset
+        if not self.request.user.is_staff:
+            queryset = self.queryset.filter(user=self.request.user)
+
         if self.request.user.is_staff:
-            return self.queryset
-        return self.queryset.filter(user=self.request.user)
+            user_id = self.request.query_params.get("user_id", None)
+            if user_id:
+                queryset = queryset.filter(user_id=user_id)
+
+
+
+        queryset = queryset.annotate(
+            is_active_calc=ExpressionWrapper(
+                Q(actual_return_date__isnull=True),
+                output_field=BooleanField()
+            )
+        )
+
+        is_active = self.request.query_params.get("is_active")
+        if is_active is not None:
+            is_active = is_active.lower() == "true"
+            queryset = queryset.filter(is_active_calc=is_active)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
     def get_serializer_class(self):
         if self.action == "list":
-            return BorrowingListSerializer
+            return BorrowingSerializer
+
         if self.action == "create":
             return BorrowingCreateSerializer
+
         if self.action in ("update", "partial_update"):
             return BorrowingReturnUpdateSerializer
         return self.serializer_class

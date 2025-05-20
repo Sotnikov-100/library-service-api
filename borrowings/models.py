@@ -59,5 +59,5 @@ class Borrowing(models.Model):
         return self.book.daily_fee * self.expired_days * multiplier
 
     class Meta:
-        ordering = ["actual_return_date", "expected_return_date"]
+        ordering = ["-actual_return_date", "expected_return_date"]
         verbose_name_plural = "borrowings"
