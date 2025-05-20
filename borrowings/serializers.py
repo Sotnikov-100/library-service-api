@@ -4,15 +4,18 @@ from rest_framework.exceptions import ValidationError
 
 from books.models import Book
 from borrowings.models import Borrowing
+from payments.models import Payment, PaymentStatus
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
-        if attrs["expected_return_date"] <=attrs["borrow_date"]:
-            raise ValidationError({
-                "expected_return_date": "Expected return date must "
-                "be greater than borrow date."
-            })
+        if attrs["expected_return_date"] <= attrs["borrow_date"]:
+            raise ValidationError(
+                {
+                    "expected_return_date": "Expected return date must "
+                    "be greater than borrow date."
+                }
+            )
         return attrs
 
     class Meta:
@@ -23,8 +26,9 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "user_id",
             "book_id",
             "borrow_date",
-            "expected_return_date"
+            "expected_return_date",
         )
+
 
 class BorrowingListSerializer(BorrowingSerializer):
     pass
@@ -35,6 +39,7 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         queryset=Book.objects.all(),
         many=False,
     )
+
     class Meta:
         model = Borrowing
         fields = (
@@ -53,15 +58,27 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         return borrowing
 
     def validate(self, attrs):
-        if attrs["expected_return_date"] <=attrs["borrow_date"]:
-            raise ValidationError({
-                "expected_return_date": "Expected return date must "
-                "be greater than borrow date."
-            })
+        if attrs["expected_return_date"] <= attrs["borrow_date"]:
+            raise ValidationError(
+                {
+                    "expected_return_date": "Expected return date must "
+                    "be greater than borrow date."
+                }
+            )
 
         if attrs["book"].inventory <= 0:
-            raise ValidationError({
-                "book inventory": "Book inventory must be greater than 0."
-            })
+            raise ValidationError(
+                {"book inventory": "Book inventory must be greater than 0."}
+            )
+
+        user = self.context["request"].user
+        if Payment.objects.filter(
+            borrowing__user=user, status=PaymentStatus.PENDING
+        ).exists():
+            raise ValidationError(
+                {
+                    "pending_payments": "You have pending payments. Cannot create a new borrowing."
+                }
+            )
 
         return attrs
