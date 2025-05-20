@@ -10,7 +10,7 @@ class AuthorTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = get_user_model().objects.create_user(
-            username="testuser", password="testpass"
+            email="testuser@user.com", password="testpass"
         )
 
         cls.author_data = {
