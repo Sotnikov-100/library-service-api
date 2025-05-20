@@ -94,14 +94,14 @@ async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if account_info:
             await update.message.reply_text(
-                "⚠️ This Telegram account is already registered!\n"
+                "This Telegram account is already registered!\n"
                 f"It is linked to user: {account_info['username']}\n\n"
                 "Use /unregister if you want to unlink this account."
             )
             return ConversationHandler.END
 
         await update.message.reply_text(
-            "📧 Please enter your email address to link with this Telegram account:\n\n"
+            "Please enter your email address to link with this Telegram account:\n\n"
             "Type /cancel to cancel the registration."
         )
         context.user_data["pending_registration"] = {"chat_id": str(chat_id)}
@@ -110,7 +110,7 @@ async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         logger.error(f"Registration error: {str(e)}")
         await update.message.reply_text(
-            "❌ An error occurred during registration.\n"
+            "An error occurred during registration.\n"
             "Please try again later or contact the administrator."
         )
         return ConversationHandler.END
@@ -129,28 +129,34 @@ async def handle_email_input(update: Update, context: ContextTypes.DEFAULT_TYPE)
         result = check_user_exists_task.delay(email)
         user_info = result.get(timeout=5)  # waiting 5 seconds for result
 
-        if user_info.get("exists"):
-            # if user not found
-            create_telegram_account_task.delay(email, chat_id)
-
+        if not user_info.get("exists"):
             await update.message.reply_text(
-                "✅ Your Telegram account registration is being processed!\n\n"
-                "You will receive a confirmation message once completed.\n"
-                "You will then receive notifications about:\n"
+                "User with this email is not registered in our system.\n\n"
+                "Please register first at our website:\n"
+                "http://127.0.0.1/api/v1/users/register/\n\n"
+                "After registration, you can link your Telegram account."
+            )
+            return EMAIL_INPUT
+
+        # Create telegram account
+        result = create_telegram_account_task.delay(email, chat_id)
+        success = result.get(timeout=5)  # wait for result
+
+        if success:
+            await update.message.reply_text(
+                "✅ Your Telegram account has been successfully linked!\n\n"
+                "You will now receive notifications about:\n"
                 "📚 New book borrowings\n"
                 "📖 Book returns\n"
                 "💰 Payments\n"
                 "📢 Other important events"
             )
         else:
-            # Если пользователь не найден, предлагаем зарегистрироваться
             await update.message.reply_text(
-                "⚠️ User with this email is not registered in our system.\n\n"
-                "Please register first at our website:\n"
-                "http://127.0.0.1/api/v1/users/register/\n\n"
-                "After registration, you can link your Telegram account."
+                "❌ Failed to link your Telegram account.\n"
+                "This account might be already linked to another user.\n"
+                "Please try again or contact support."
             )
-            return EMAIL_INPUT
 
         return ConversationHandler.END
 
@@ -167,11 +173,19 @@ async def unregister(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     try:
-        delete_telegram_account_task.delay(str(chat_id))
-        await update.message.reply_text(
-            "✅ Your Telegram account unregistration is being processed.\n"
-            "You will receive a confirmation message once completed."
-        )
+        result = delete_telegram_account_task.delay(str(chat_id))
+        success = result.get(timeout=5)  # wait for result
+
+        if success:
+            await update.message.reply_text(
+                "✅ Your Telegram account has been successfully unlinked.\n"
+                "You will no longer receive notifications."
+            )
+        else:
+            await update.message.reply_text(
+                "❌ Failed to unlink your Telegram account.\n"
+                "Please try again or contact support."
+            )
     except Exception as e:
         logger.error(f"Unregistration error: {str(e)}")
         await update.message.reply_text(

@@ -111,7 +111,12 @@ def borrowing_post_save(sender, instance, created, **kwargs):
         if not hasattr(instance.user, "telegram_account"):
             return
 
-        message = f"{'New' if created else 'Updated'} borrowing: {instance}"
+        message = (
+            f"{'📚 New' if created else '📖 Updated'} borrowing:\n"
+            f"Book: {instance.book.title}\n"
+            f"Borrow date: {instance.borrow_date}\n"
+            f"Expected return: {instance.expected_return_date}"
+        )
         create_notification_task.delay(instance.user.id, message)
 
     except Exception as e:
@@ -121,16 +126,20 @@ def borrowing_post_save(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Payment)
 def payment_post_save(sender, instance, created, **kwargs):
     try:
-        if not hasattr(instance.user, "telegram_account"):
+        user = instance.borrowing.user
+        if not hasattr(user, "telegram_account"):
             return
 
-        if created:
-            message = f"New payment: {instance}"
-        else:
-            message = f"Payment updated: {instance}"
+        message = (
+            f"{'💰 New' if created else '💳 Updated'} payment:\n"
+            f"Amount: ${instance.money_to_pay}\n"
+            f"Status: {instance.status}\n"
+            f"Type: {instance.type}\n"
+            f"For book: {instance.borrowing.book.title}"
+        )
 
         notification = Notification.objects.create(
-            user=instance.user, message=message, is_sent=False
+            user=user, message=message, is_sent=False
         )
         send_notification_task.delay(notification.id)
 

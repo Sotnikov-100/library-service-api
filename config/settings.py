@@ -159,6 +159,9 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "base.openapi.RequestResponseAutoSchema",
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
 }
 
 SIMPLE_JWT = {
@@ -189,12 +192,14 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Library API Service",
     "DESCRIPTION": "Library API Service",
     "VERSION": "1.0.0",
-    "SERVE_INCLUDE_SCHEMA": False,
-    # OTHER SETTINGS
-    "SWAGGER_SETTINGS": {
+    "SERVE_INCLUDE_SCHEMA": True,
+    "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
-        "defaultModelRendering": "model",
-        "defaultModelsExpandDepth": 2,
-        "defaultModelExpandDepth": 2,
+        "persistAuthorization": True,
+        "displayOperationId": True,
     },
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SORT_OPERATIONS": False,
+    "ENABLE_DJANGO_DEPLOY_CHECK": False,
+    "DISABLE_ERRORS_AND_WARNINGS": True,
 }

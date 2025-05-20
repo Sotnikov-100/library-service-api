@@ -24,7 +24,12 @@ class TelegramAccountCreateSerializer(serializers.ModelSerializer):
         model = TelegramAccount
         fields = ["chat_id"]
 
-    def create(self, validated_data):
+    def validate(self, attrs):
         user = self.context["request"].user
-        validated_data["user"] = user
+        if TelegramAccount.objects.filter(user=user).exists():
+            raise serializers.ValidationError({"user": "User already has a Telegram account"})
+        return attrs
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
         return super().create(validated_data)

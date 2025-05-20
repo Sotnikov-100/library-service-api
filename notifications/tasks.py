@@ -116,7 +116,7 @@ def create_telegram_account_task(self, email, chat_id):
                 message = (
                     "⚠️ User with this email is not registered in our system.\n\n"
                     "Please register first at our website:\n"
-                    "http://your-library.com/register\n\n"
+                    "http://127.0.0.1/api/v1/users/register/\n\n"
                     "After registration, you can link your Telegram account."
                 )
                 loop.run_until_complete(
