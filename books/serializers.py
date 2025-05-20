@@ -50,7 +50,7 @@ class BookCreateUpdateSerializer(serializers.ModelSerializer):
         authors = validated_data.pop("authors")
         book = Book.objects.create(**validated_data)
         for author in authors:
-            author.books.create(book=book, author=author)
+            BookAuthor.objects.create(book=book, author=author)
         return book
 
     def update(self, instance, validated_data):
