@@ -14,6 +14,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -159,3 +160,10 @@ SIMPLE_JWT = {
 }
 
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+
+CELERY_BEAT_SCHEDULE = {
+    "check-expired-payments": {
+        "task": "payments.tasks.check_expired_payments",
+        "schedule": crontab(minute="*/1"),
+    },
+}
