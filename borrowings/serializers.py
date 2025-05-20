@@ -7,7 +7,6 @@ from borrowings.models import Borrowing
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
-    # book = BookSerializer(read_only=True, many=False)
     def validate(self, attrs):
         if attrs["expected_return_date"] <=attrs["borrow_date"]:
             raise ValidationError({
@@ -47,8 +46,9 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        # book = validated_data.pop("book")
-        # book.inventory = book.inventory - 1
+        book = validated_data["book"]
+        book.inventory -= 1
+        book.save(update_fields=["inventory"])
         borrowing = Borrowing.objects.create(**validated_data)
         return borrowing
 
@@ -65,18 +65,3 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
             })
 
         return attrs
-
-        # if (
-        #     attrs["actual_return_date"]
-        # ):
-        #     raise ValidationError({
-        #         "actual_return_date": "Actual return date shoutd not be filled in creation."
-        #     })
-        #
-        # if (
-        #     attrs["actual_return_date"] <= attrs["borrow_date"]
-        # ):
-        #     raise ValidationError({
-        #         "actual_return_date": "If actual return date exists it "
-        #                               "must be greater than borrow date."
-        #     })
