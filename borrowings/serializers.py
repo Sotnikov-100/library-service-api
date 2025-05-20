@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -67,22 +68,30 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class BorrowingUpdateSerializer(serializers.ModelSerializer):
+class BorrowingReturnUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Borrowing
-        fields = ("actual_return_date",)
+        fields = (
+            "id",
+            "actual_return_date",
+        )
+
+    def validate(self, attrs):
+        if self.instance.actual_return_date is not None:
+            raise ValidationError("This borrowing has already been required.")
+        actual_return_date = attrs.get("actual_return_date")
+        if actual_return_date and actual_return_date <= self.instance.borrow_date:
+            raise ValidationError({
+                "actual_return_date": "Return date must be after borrow date."
+            })
+
+        return attrs
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        if instance.actual_return_date is None and "actual_return_date" in validated_data:
-            instance.book.inventory += 1
-            instance.book.save(update_fields=["inventory"])
-        return super().update(instance, validated_data)
+        instance.actual_return_date = validated_data.get("actual_return_date", timezone.now().date())
+        instance.book.inventory += 1
+        instance.book.save(update_fields=["inventory"])
+        instance.save(update_fields=["actual_return_date"])
 
-    def validate(self, attrs):
-        if "actual_return_date" in attrs:
-            if attrs["actual_return_date"] <= self.instance.borrow_date:
-                raise ValidationError({
-                    "actual_return_date": "Return date must be after borrow date."
-                })
-        return attrs
+        return instance
