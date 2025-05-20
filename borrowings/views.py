@@ -1,11 +1,11 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.db.models import BooleanField, ExpressionWrapper, Q
 from borrowings.models import Borrowing
 from borrowings.pagiantion import BorrowingSetPagination
 from borrowings.serializers import (
     BorrowingSerializer,
-    BorrowingListSerializer,
     BorrowingCreateSerializer,
     BorrowingReturnUpdateSerializer
 )
@@ -26,9 +26,19 @@ class BorrowingViewSet(viewsets.ModelViewSet):
             if user_id:
                 queryset = queryset.filter(user_id=user_id)
 
-        is_active = self.request.query_params.get("is_active", None)
-        if is_active:
-            queryset = queryset.filter(is_active=is_active)
+
+
+        queryset = queryset.annotate(
+            is_active_calc=ExpressionWrapper(
+                Q(actual_return_date__isnull=True),
+                output_field=BooleanField()
+            )
+        )
+
+        is_active = self.request.query_params.get("is_active")
+        if is_active is not None:
+            is_active = is_active.lower() == "true"
+            queryset = queryset.filter(is_active_calc=is_active)
 
         return queryset
 
@@ -38,7 +48,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         serializer = self.serializer_class
         if self.action == "list":
-            serializer = BorrowingListSerializer
+            serializer = BorrowingSerializer
 
         if self.action == "create":
             return BorrowingCreateSerializer

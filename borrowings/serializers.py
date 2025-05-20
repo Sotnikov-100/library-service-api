@@ -24,12 +24,10 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "book_id",
             "borrow_date",
             "expected_return_date",
+            "actual_return_date",
             "is_active"
         )
-
-class BorrowingListSerializer(BorrowingSerializer):
-    pass
-
+        ordering = ["-actual_return_date", "-borrow_date"]
 
 class BorrowingCreateSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(

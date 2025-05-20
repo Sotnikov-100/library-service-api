@@ -43,5 +43,5 @@ class Borrowing(models.Model):
         return self.actual_return_date > datetime.date.today()
 
     class Meta:
-        ordering = ["actual_return_date", "expected_return_date"]
+        ordering = ["-actual_return_date", "expected_return_date"]
         verbose_name_plural = "borrowings"
