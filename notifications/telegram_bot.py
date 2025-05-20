@@ -1,11 +1,10 @@
 import os
 import asyncio
-from dotenv import load_dotenv
 from telegram import Bot
 
 from notifications.models import Notification
 
-load_dotenv()
+TELEGRAM_API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
 
 
 class TelegramNotification:

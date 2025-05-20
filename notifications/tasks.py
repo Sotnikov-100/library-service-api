@@ -8,6 +8,11 @@ User = get_user_model()
 
 @shared_task
 def send_notification_task(user_id, message, chat_id):
-    user = User.objects.get(id=user_id)
     notifier = TelegramNotification()
     notifier.send_notification(message, chat_id)
+
+
+
+@shared_task
+def send_notification_to_all_users(message):
+    ...

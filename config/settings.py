@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_celery_beat",
     "django_celery_results",
+    "drf_spectacular",
     # local apps
     "books",
     "users",
@@ -158,7 +159,6 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "base.openapi.RequestResponseAutoSchema",
-
 }
 
 SIMPLE_JWT = {
@@ -182,4 +182,19 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
     }
+}
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Library API Service",
+    "DESCRIPTION": "Library API Service",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+    "SWAGGER_SETTINGS": {
+        "deepLinking": True,
+        "defaultModelRendering": "model",
+        "defaultModelsExpandDepth": 2,
+        "defaultModelExpandDepth": 2,
+    },
 }

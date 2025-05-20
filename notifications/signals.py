@@ -35,5 +35,4 @@ def telegram_account_receiver(sender, instance, **kwargs):
             message = f"Telegram Account Renew: {instance}"
     else:  # post_delete
         message = f"Telegram Account Deleted: Email: {instance.user.email}"
-    print(instance.user, message, instance.chat_id)
     service.create_notification(instance.user, message, instance.chat_id)

@@ -10,7 +10,7 @@ class TelegramAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = TelegramAccount
         fields = ["id", "user", "chat_id", "bind_token", "created_at", "updated_at"]
-        read_only_fields = ("id", "chat_id", "created_at", "updated_at", "bind_token")
+        read_only_fields = ("id", "chat_id", "bind_token", "created_at", "updated_at",)
 
 
 class TelegramAccountCreateSerializer(serializers.ModelSerializer):

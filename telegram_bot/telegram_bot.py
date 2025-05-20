@@ -1,12 +1,11 @@
 import os
 
-from dotenv import load_dotenv
 from telegram import BotCommand
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-
-load_dotenv()
+# token от BotFather
+TOKEN = os.getenv("TELEGRAM_API_TOKEN")
 
 
 # command /start
@@ -56,9 +55,6 @@ async def set_commands(application):
     ]
     await application.bot.set_my_commands(commands)
 
-
-# token от BotFather
-TOKEN = os.getenv("TELEGRAM_API_TOKEN")
 
 app = ApplicationBuilder().token(TOKEN).build()
 
