@@ -2,6 +2,7 @@ import os
 import uuid
 from enum import unique
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.text import slugify
 
@@ -24,8 +25,8 @@ class Book(models.Model):
     cover = models.CharField(
         max_length=4, choices=BookCoverType.choices, default=BookCoverType.HARD
     )
-    inventory = models.IntegerField()
-    daily_fee = models.DecimalField(max_digits=6, decimal_places=2)
+    inventory = models.IntegerField(validators=[MinValueValidator(0)])
+    daily_fee = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.0)])
     image = models.ImageField(null=True, blank=True, upload_to=book_image_file_path)
     authors = models.ManyToManyField(
         "authors.Author", through="authors.BookAuthor", related_name="books"
