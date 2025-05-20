@@ -65,3 +65,24 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
             })
 
         return attrs
+
+
+class BorrowingUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Borrowing
+        fields = ("actual_return_date",)
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        if instance.actual_return_date is None and "actual_return_date" in validated_data:
+            instance.book.inventory += 1
+            instance.book.save(update_fields=["inventory"])
+        return super().update(instance, validated_data)
+
+    def validate(self, attrs):
+        if "actual_return_date" in attrs:
+            if attrs["actual_return_date"] <= self.instance.borrow_date:
+                raise ValidationError({
+                    "actual_return_date": "Return date must be after borrow date."
+                })
+        return attrs
