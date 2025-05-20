@@ -38,10 +38,6 @@ class Borrowing(models.Model):
     def is_active(self: "Borrowing") -> bool:
         return self.actual_return_date is None
 
-    @property
-    def is_expired(self: "Borrowing") -> bool:
-        return self.actual_return_date > datetime.date.today()
-
     class Meta:
         ordering = ["-actual_return_date", "expected_return_date"]
         verbose_name_plural = "borrowings"
