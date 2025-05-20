@@ -50,8 +50,9 @@ class User(AbstractUser):
     is_superuser = models.BooleanField(default=False)
     last_login = models.DateTimeField(default=None, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-    profile_image = models.ImageField(upload_to="users/", blank=True, null=True)
-
+    profile_image = models.ImageField(
+        upload_to="users/", blank=True, null=True
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = [

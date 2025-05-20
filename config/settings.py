@@ -14,6 +14,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party apps
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "debug_toolbar",
     "django_celery_beat",
     "django_celery_results",
@@ -156,6 +158,8 @@ TELEGRAM_API_TOKEN = os.getenv("TELEGRAM_API_TOKEN", "default_token")
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "base.openapi.RequestResponseAutoSchema",
@@ -165,9 +169,19 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
+    "AUTH_HEADER_NAME": "HTTP_X_ACCESS_TOKEN",
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
     "ROTATE_REFRESH_TOKENS": True,
+}
+
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+
+CELERY_BEAT_SCHEDULE = {
+    "check-expired-payments": {
+        "task": "payments.tasks.check_expired_payments",
+        "schedule": crontab(minute="*/1"),
+    },
 }
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", default="redis://localhost:6379/")
