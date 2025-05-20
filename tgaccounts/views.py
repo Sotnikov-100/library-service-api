@@ -7,7 +7,10 @@ from base.generics import CreateAPIView
 from base.viewsets import ModelViewSet
 from config.settings import TELEGRAM_BOT_NAME
 from tgaccounts.models import TelegramAccount
-from tgaccounts.serializers import TelegramAccountCreateSerializer, TelegramAccountSerializer
+from tgaccounts.serializers import (
+    TelegramAccountCreateSerializer,
+    TelegramAccountSerializer,
+)
 
 BOT_NAME = TELEGRAM_BOT_NAME
 
@@ -44,9 +47,9 @@ class TelegramAccountRegisterView(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        chat_id = self.kwargs.get('chat_id')
+        chat_id = self.kwargs.get("chat_id")
         data = request.data.copy()
-        data['chat_id'] = chat_id
+        data["chat_id"] = chat_id
 
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)

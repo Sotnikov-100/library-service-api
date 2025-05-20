@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from tgaccounts.views import (
     TgBotLinkView,
     TelegramAccountViewSet,
-    TelegramAccountRegisterView
+    TelegramAccountRegisterView,
 )
 
 app_name = "tgaccounts"
@@ -17,7 +17,7 @@ urlpatterns = [
     path(
         "tg-accounts/<str:chat_id>/register/",
         TelegramAccountRegisterView.as_view(),
-        name="tg_account_register"
+        name="tg_account_register",
     ),
     path("", include(router.urls), name="tg_accounts"),
 ]
