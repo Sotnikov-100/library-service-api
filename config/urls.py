@@ -30,7 +30,6 @@ urlpatterns = [
     path("api/v1/users/", include("users.urls", namespace="users")),
     path("__debug__/", include("debug_toolbar.urls")),
     path("api/doc/schema/", SpectacularAPIView.as_view(), name="schema"),
-    # Optional UI:
     path(
         "api/doc/swagger/",
         SpectacularSwaggerView.as_view(url_name="schema"),

@@ -7,8 +7,12 @@ from books.serializers import BookSerializer, BookCreateUpdateSerializer
 class BooksSerializersTest(TestCase):
 
     def setUp(self):
-        self.author1 = Author.objects.create(first_name="Author 1", last_name="First Author")
-        self.author2 = Author.objects.create(first_name="Author 2", last_name="Second Author")
+        self.author1 = Author.objects.create(
+            first_name="Author 1", last_name="First Author"
+        )
+        self.author2 = Author.objects.create(
+            first_name="Author 2", last_name="Second Author"
+        )
 
     def test_daily_fee_validation_negative(self):
         data = {
@@ -16,7 +20,7 @@ class BooksSerializersTest(TestCase):
             "inventory": 5,
             "cover": "Soft",
             "daily_fee": -5.0,
-            "authors": [self.author1.id]
+            "authors": [self.author1.id],
         }
         serializer = BookSerializer(data=data)
         self.assertFalse(serializer.is_valid())
@@ -28,7 +32,7 @@ class BooksSerializersTest(TestCase):
             "inventory": -3,
             "cover": "Hard",
             "daily_fee": 4.0,
-            "authors": [self.author1.id]
+            "authors": [self.author1.id],
         }
         serializer = BookCreateUpdateSerializer(data=data)
         self.assertFalse(serializer.is_valid())
@@ -40,7 +44,7 @@ class BooksSerializersTest(TestCase):
             "inventory": 10,
             "cover": "Soft",
             "daily_fee": 2.5,
-            "authors": [self.author1.id, self.author2.id]
+            "authors": [self.author1.id, self.author2.id],
         }
         serializer = BookCreateUpdateSerializer(data=data)
         self.assertTrue(serializer.is_valid(), serializer.errors)
@@ -63,7 +67,7 @@ class BooksSerializersTest(TestCase):
             "inventory": 7,
             "cover": "Soft",
             "daily_fee": 3.0,
-            "authors": [self.author2.id]
+            "authors": [self.author2.id],
         }
 
         serializer = BookCreateUpdateSerializer(book, data=data)

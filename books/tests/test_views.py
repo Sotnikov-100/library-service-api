@@ -9,16 +9,25 @@ from books.models import Book
 
 User = get_user_model()
 
+
 class BooksViewsTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
 
-        self.admin_user = User.objects.create_superuser(email="adminadmin@admin.com", password="adminpass")
-        self.regular_user = User.objects.create_user(email="useruser@user.com", password="userpass")
+        self.admin_user = User.objects.create_superuser(
+            email="adminadmin@admin.com", password="adminpass"
+        )
+        self.regular_user = User.objects.create_user(
+            email="useruser@user.com", password="userpass"
+        )
 
-        self.author = Author.objects.create(first_name="Author 1", last_name="First Author")
-        self.book = Book.objects.create(title="Test Book", inventory=5, cover="Soft", daily_fee=2.0)
+        self.author = Author.objects.create(
+            first_name="Author 1", last_name="First Author"
+        )
+        self.book = Book.objects.create(
+            title="Test Book", inventory=5, cover="Soft", daily_fee=2.0
+        )
         BookAuthor.objects.create(book=self.book, author=self.author)
 
         self.list_url = reverse("books:books-list")
@@ -27,13 +36,13 @@ class BooksViewsTest(TestCase):
     def test_list_books_avilable_for_anyone(self):
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["title"], self.book.title)
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(response.data["results"][0]["title"], self.book.title)
 
     def test_retrieve_book_allowed_for_anyone(self):
         response = self.client.get(self.detail_url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["title"], self.book.title)
+        self.assertEqual(response.data["results"][0]["title"], self.book.title)
 
     def test_create_book_denied_for_anonymous(self):
         data = {
@@ -41,7 +50,7 @@ class BooksViewsTest(TestCase):
             "inventory": 3,
             "cover": "Hard",
             "daily_fee": 1.5,
-            "authors": [self.author.id]
+            "authors": [self.author.id],
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, 401)
@@ -53,7 +62,7 @@ class BooksViewsTest(TestCase):
             "inventory": 7,
             "cover": "Soft",
             "daily_fee": 3.0,
-            "authors": [self.author.id]
+            "authors": [self.author.id],
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, 201)
