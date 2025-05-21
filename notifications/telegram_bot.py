@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 
@@ -21,42 +22,31 @@ class TelegramNotification:
             logger.error(f"Failed to send Telegram notification: {str(e)}")
             return False
 
-
-class TGNotificationService:
+class TelegramNotificationService:
+    """
+    Service for sending notifications via Telegram.
+    Supports usage in both synchronous and asynchronous code.
+    """
     def __init__(self):
-        try:
-            self.notifier = TelegramNotification()
-        except ValueError as e:
-            print(f"Telegram notification service initialization failed: {str(e)}")
-            self.notifier = None
+        self.notifier = TelegramNotification()
 
-    def create_notification(self, user, message):
-        notification = Notification.objects.create(
-            user=user, message=message, is_sent=False
-        )
-
-        if not self.notifier:
-            return notification
-
-        # Check if user has telegram account
-        if not hasattr(user, "telegram_account"):
-            return notification
-
+    def send(self, message: str, chat_id: int) -> bool:
+        """
+        Synchronous method to send a message.
+        """
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+            loop = None
 
-        try:
-            success = loop.run_until_complete(
-                self.notifier.send_notification(
-                    message=message, chat_id=user.telegram_account.chat_id
-                )
+        if loop and loop.is_running():
+            raise RuntimeError(
+                "Cannot call sync send inside a running event loop. Use send_async instead."
             )
-            notification.is_sent = True
-            notification.save()
-        except Exception as e:
-            print(f"Error sending notification: {str(e)}")
+        return asyncio.run(self.notifier.send_notification(message=message, chat_id=chat_id))
 
-        return notification
+    async def send_async(self, message: str, chat_id: int) -> bool:
+        """
+        Asynchronous method to send a message.
+        """
+        return await self.notifier.send_notification(message=message, chat_id=chat_id)

@@ -173,25 +173,20 @@ async def unregister(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     try:
-        result = delete_telegram_account_task.delay(str(chat_id))
-        success = result.get(timeout=5)  # wait for result
+        # Just send the task to Celery, do not wait for the result.
+        delete_telegram_account_task.delay(str(chat_id))
 
-        if success:
-            await update.message.reply_text(
-                "✅ Your Telegram account has been successfully unlinked.\n"
-                "You will no longer receive notifications."
-            )
-        else:
-            await update.message.reply_text(
-                "❌ Failed to unlink your Telegram account.\n"
-                "Please try again or contact support."
-            )
+        # Immediately inform the user that their request is being processed.
+        await update.message.reply_text(
+            "Unlink request received. You will get a confirmation message soon."
+        )
     except Exception as e:
         logger.error(f"Unregistration error: {str(e)}")
         await update.message.reply_text(
-            "❌ An error occurred while unregistering.\n"
+            "An error occurred while unlinking your account.\n"
             "Please try again later or contact the administrator."
         )
+
 
 
 async def set_commands(application):

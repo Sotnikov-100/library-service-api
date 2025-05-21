@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 
 from notifications.models import Notification
-from notifications.telegram_bot import TelegramNotification
+from notifications.telegram_bot import TelegramNotification, TelegramNotificationService
 from tgaccounts.models import TelegramAccount
 
 logger = logging.getLogger(__name__)
@@ -29,24 +29,16 @@ def check_telegram_account_task(chat_id):
 @shared_task(bind=True, max_retries=3)
 def send_notification_task(self, notification_id):
     """Send notification to user through Telegram."""
+    service = TelegramNotificationService()
     try:
         notification = Notification.objects.get(id=notification_id)
 
         if not hasattr(notification.user, "telegram_account"):
             return False
 
-        notifier = TelegramNotification()
-        try:
-            loop = asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-
-        success = loop.run_until_complete(
-            notifier.send_notification(
-                message=notification.message,
-                chat_id=notification.user.telegram_account.chat_id,
-            )
+        success = service.send(
+            message=notification.message,
+            chat_id=notification.user.telegram_account.chat_id,
         )
 
         if success:
@@ -70,23 +62,13 @@ def send_notification_to_all_users(message):
         users = User.objects.filter(telegram_account__isnull=False)
         notification_count = 0
 
+        service = TelegramNotificationService()
         for user in users:
-            # Send message first
-            notifier = TelegramNotification()
-            try:
-                loop = asyncio.get_event_loop()
-            except RuntimeError:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-
-            success = loop.run_until_complete(
-                notifier.send_notification(
-                    message=message,
-                    chat_id=user.telegram_account.chat_id,
-                )
+            success = service.send(
+                message=message,
+                chat_id=user.telegram_account.chat_id,
             )
 
-            # Only create notification record if message was sent
             if success:
                 Notification.objects.create(user=user, message=message, is_sent=True)
                 notification_count += 1
@@ -100,49 +82,25 @@ def send_notification_to_all_users(message):
 @shared_task(bind=True, max_retries=3)
 def create_telegram_account_task(self, email, chat_id):
     """Create Telegram account for user."""
+    service = TelegramNotificationService()
     try:
         with transaction.atomic():
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
-                # Send notification directly for non-existent user
-                notifier = TelegramNotification()
-                try:
-                    loop = asyncio.get_event_loop()
-                except RuntimeError:
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-
                 message = (
                     "⚠️ User with this email is not registered in our system.\n\n"
                     "Please register first at our website:\n"
                     "http://127.0.0.1/api/v1/users/register/\n\n"
                     "After registration, you can link your Telegram account."
                 )
-                loop.run_until_complete(
-                    notifier.send_notification(
-                        message=message,
-                        chat_id=chat_id,
-                    )
-                )
+                service.send(message=message, chat_id=chat_id, )
                 return False
 
             if TelegramAccount.objects.filter(chat_id=chat_id).exists():
                 # Send notification directly for already linked account
-                notifier = TelegramNotification()
-                try:
-                    loop = asyncio.get_event_loop()
-                except RuntimeError:
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-
                 message = "⚠️ This Telegram account is already linked to another user."
-                loop.run_until_complete(
-                    notifier.send_notification(
-                        message=message,
-                        chat_id=chat_id,
-                    )
-                )
+                service.send(message=message, chat_id=chat_id)
                 return False
 
             # Create account and let signal handle the notification
@@ -156,26 +114,24 @@ def create_telegram_account_task(self, email, chat_id):
 @shared_task(bind=True, max_retries=3)
 def delete_telegram_account_task(self, chat_id):
     """Delete Telegram account."""
+    service = TelegramNotificationService()
     try:
         with transaction.atomic():
-            account = TelegramAccount.objects.get(chat_id=chat_id)
+            try:
+                account = TelegramAccount.objects.get(chat_id=chat_id)
+            except TelegramAccount.DoesNotExist:
+                message = "ℹ️ You don’t have a linked Telegram account."
+                service.send(message=message, chat_id=chat_id)
+                return False
+
             user = account.user
 
             # Send notification directly through bot before deletion
-            notifier = TelegramNotification()
-            try:
-                loop = asyncio.get_event_loop()
-            except RuntimeError:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-
-            message = f"👋 Your Telegram account has been unlinked from {user.email}. You will no longer receive notifications."
-            success = loop.run_until_complete(
-                notifier.send_notification(
-                    message=message,
-                    chat_id=chat_id,
-                )
+            message = (
+                f"👋 Your Telegram account has been unlinked from {user.email}. "
+                "You will no longer receive notifications."
             )
+            success = service.send(message=message, chat_id=chat_id)
 
             # Create notification record with correct status
             if success:
@@ -184,8 +140,6 @@ def delete_telegram_account_task(self, chat_id):
             # Delete the account
             account.delete()
             return True
-    except TelegramAccount.DoesNotExist:
-        return False
     except Exception as e:
         logger.error(f"Critical error deleting telegram account: {str(e)}")
         self.retry(exc=e, countdown=60 * 5)
@@ -194,24 +148,15 @@ def delete_telegram_account_task(self, chat_id):
 @shared_task
 def create_notification_task(user_id, message):
     """Create and send a notification for regular events."""
+    service = TelegramNotificationService()
     try:
         user = User.objects.get(id=user_id)
         if not hasattr(user, "telegram_account"):
             return False
 
-        # Send message first
-        notifier = TelegramNotification()
-        try:
-            loop = asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-
-        success = loop.run_until_complete(
-            notifier.send_notification(
-                message=message,
-                chat_id=user.telegram_account.chat_id,
-            )
+        success = service.send(
+            message=message,
+            chat_id=user.telegram_account.chat_id,
         )
 
         # Only create notification record if message was sent
