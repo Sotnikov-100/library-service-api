@@ -56,13 +56,17 @@ def send_notification_task(self, notification_id):
 
 
 @shared_task
-def send_notification_to_all_users(message):
+def send_notification_to_all_users(message, chat_id=None):
     """Send broadcast message to all users with Telegram accounts."""
+    service = TelegramNotificationService()
+    if chat_id:
+        user_id = User.objects.filter(is_staff=True).values_list('id', flat=True).first()
+        service.send(message=message, chat_id=chat_id)
+        Notification.objects.create(user_id=user_id, message=message, is_sent=True)
     try:
         users = User.objects.filter(telegram_account__isnull=False)
         notification_count = 0
 
-        service = TelegramNotificationService()
         for user in users:
             success = service.send(
                 message=message,

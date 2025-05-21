@@ -55,9 +55,11 @@ def borrowing_post_save(sender, instance, created, **kwargs):
 
         message = (
             f"{'New' if created else 'Updated'} borrowing:\n"
+            f"First name: {instance.user.first_name} last Name: {instance.user.last_name}\n"
             f"Book: {instance.book.title}\n"
             f"Borrow date: {instance.borrow_date}\n"
-            f"Expected return: {instance.expected_return_date}"
+            f"Expected return: {instance.expected_return_date}\n"
+            f"Actual return: {instance.actual_return_date}\n"
         )
         create_notification_task.delay(instance.user.id, message)
 
@@ -79,7 +81,9 @@ def payment_post_save(sender, instance, created, **kwargs):
             f"Amount: ${instance.money_to_pay}\n"
             f"Status: {instance.status}\n"
             f"Type: {instance.type}\n"
-            f"For book: {instance.borrowing.book.title}"
+            f"For book: {instance.borrowing.book.title}\n"
+            f"money to pay: {instance.money_to_pay}\n"
+            f"created at: {instance.created_at}\n"
         )
 
         notification = Notification.objects.create(
