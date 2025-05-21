@@ -9,7 +9,7 @@ from borrowings.pagiantion import BorrowingSetPagination
 from borrowings.serializers import (
     BorrowingSerializer,
     BorrowingCreateSerializer,
-    BorrowingReturnUpdateSerializer,
+    BorrowingReturnUpdateSerializer, BorrowingRetrieveSerializer,
 )
 from borrowings.docs import(
     get_borrowings_create_schema,
@@ -34,11 +34,16 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     queryset = Borrowing.objects.select_related("book", "user")
     serializer_class = BorrowingSerializer
     pagination_class = BorrowingSetPagination
+    permission_classes = (IsAuthenticatedOnly,)
 
     def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return Borrowing.objects.none()
+
         queryset = self.queryset
+
         if not self.request.user.is_staff:
-            queryset = self.queryset.filter(user=self.request.user)
+            queryset = queryset.filter(user=self.request.user)
 
         if self.request.user.is_staff:
             user_id = self.request.query_params.get("user_id", None)
@@ -72,6 +77,9 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
         if self.action in ("update", "partial_update"):
             return BorrowingReturnUpdateSerializer
+
+        if self.action == "retrieve":
+            return BorrowingRetrieveSerializer
         return self.serializer_class
 
     def get_serializer_context(self):
