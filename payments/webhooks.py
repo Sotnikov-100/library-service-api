@@ -9,7 +9,7 @@ from payments.models import Payment, PaymentStatus
 from payments.services import send_telegram_notification
 
 logger = logging.getLogger(__name__)
-stripe.api_key = os.environ.get("STRIPE_WEBHOOK_SECRET")
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 
 @csrf_exempt
@@ -36,17 +36,7 @@ def stripe_webhook(request):
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
         logger.info(f"Processing completed session: {session.id}")
-
-        try:
-            payment = Payment.objects.get(session_id=session.id)
-            if session.payment_status == "paid":
-                payment.status = PaymentStatus.PAID
-                payment.save()
-                logger.info(f"Payment {payment.id} marked as PAID")
-        except Payment.DoesNotExist:
-            logger.error(f"Payment not found for session: {session.id}")
-        except Exception as e:
-            logger.error(f"Error processing payment: {str(e)}")
+        handle_checkout_session(session)
 
     return HttpResponse(status=200)
 
