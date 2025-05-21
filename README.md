@@ -10,7 +10,7 @@
 - Admin/user roles
 - Custom JWT header (`Authorize`) for easier testing with ModHeader
 
-### 📚 Books Service
+### 📚 Author/Books Service
 - CRUD operations for books
 - Admin-only: create/update/delete
 - Everyone (even unauthenticated): list/view books
@@ -18,6 +18,7 @@
 ### 📖 Borrowings
 - Users can borrow books if available
 - Borrowing validation: no borrowing if inventory is 0
+- Dates consiquency validation: return date after borrowing date
 - Returns with automatic inventory update
 - Daily overdue check (notifies via Telegram)
 - Filtering by status/user (admin only)
@@ -61,7 +62,7 @@
 | **Messaging**             | Telegram Bot API                                 |
 | **Deployment**            | Docker + Docker Compose                          |
 | **CI/CD**                 | GitHub Actions                                   |
-| **Documentation**         | Swagger / Redoc via drf-spectacular              |
+| **Documentation**         | Swagger  via drf-spectacular                     |
 | **Linters & Formatters:** | `flake8`,`black`, `ruff`                         |
 
 ___
