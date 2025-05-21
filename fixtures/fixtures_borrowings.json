@@ -1,0 +1,602 @@
+[
+  {
+    "model": "borrowings.borrowing",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-05-21 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-05-19",
+      "expected_return_date": "2025-05-22",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-05-21 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-05-01",
+      "expected_return_date": "2025-05-07",
+      "actual_return_date": "2025-05-20"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-05-21 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-03-04",
+      "expected_return_date": "2025-04-16",
+      "actual_return_date": "2025-05-01"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 4,
+    "fields": {
+      "created_at": "2025-04-18 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-01-30",
+      "expected_return_date": "2025-03-14",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 5,
+    "fields": {
+      "created_at": "2025-04-13 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-24",
+      "expected_return_date": "2025-03-30",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-05-15 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-26",
+      "expected_return_date": "2025-04-10",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 7,
+    "fields": {
+      "created_at": "2025-04-03 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-01",
+      "expected_return_date": "2025-04-04",
+      "actual_return_date": "2025-04-18"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 8,
+    "fields": {
+      "created_at": "2025-05-13 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-23",
+      "expected_return_date": "2025-04-29",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 9,
+    "fields": {
+      "created_at": "2025-04-29 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-27",
+      "expected_return_date": "2025-04-30",
+      "actual_return_date": "2025-05-02"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 10,
+    "fields": {
+      "created_at": "2025-04-27 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-25",
+      "expected_return_date": "2025-04-28",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 11,
+    "fields": {
+      "created_at": "2025-04-10 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-21",
+      "expected_return_date": "2025-03-27",
+      "actual_return_date": "2025-04-02"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 12,
+    "fields": {
+      "created_at": "2025-05-08 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-18",
+      "expected_return_date": "2025-04-24",
+      "actual_return_date": "2025-04-30"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 13,
+    "fields": {
+      "created_at": "2025-03-25 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-01-06",
+      "expected_return_date": "2025-02-18",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 14,
+    "fields": {
+      "created_at": "2025-04-11 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-22",
+      "expected_return_date": "2025-03-28",
+      "actual_return_date": "2025-04-07"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 15,
+    "fields": {
+      "created_at": "2025-03-26 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-06",
+      "expected_return_date": "2025-03-12",
+      "actual_return_date": "2025-03-26"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 16,
+    "fields": {
+      "created_at": "2025-04-18 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-16",
+      "expected_return_date": "2025-04-19",
+      "actual_return_date": "2025-05-02"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 17,
+    "fields": {
+      "created_at": "2025-05-19 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-29",
+      "expected_return_date": "2025-05-05",
+      "actual_return_date": "2025-05-12"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 18,
+    "fields": {
+      "created_at": "2025-04-22 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-03",
+      "expected_return_date": "2025-03-18",
+      "actual_return_date": "2025-03-23"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 19,
+    "fields": {
+      "created_at": "2025-03-25 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-03-23",
+      "expected_return_date": "2025-03-26",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 20,
+    "fields": {
+      "created_at": "2025-04-25 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-23",
+      "expected_return_date": "2025-04-26",
+      "actual_return_date": "2025-05-07"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 21,
+    "fields": {
+      "created_at": "2025-05-01 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-29",
+      "expected_return_date": "2025-05-02",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 22,
+    "fields": {
+      "created_at": "2025-05-02 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-12",
+      "expected_return_date": "2025-04-18",
+      "actual_return_date": "2025-04-21"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 23,
+    "fields": {
+      "created_at": "2025-03-22 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-02",
+      "expected_return_date": "2025-03-08",
+      "actual_return_date": "2025-03-19"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 24,
+    "fields": {
+      "created_at": "2025-05-14 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-25",
+      "expected_return_date": "2025-04-09",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 25,
+    "fields": {
+      "created_at": "2025-05-02 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-13",
+      "expected_return_date": "2025-03-28",
+      "actual_return_date": "2025-04-06"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 26,
+    "fields": {
+      "created_at": "2025-04-08 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-06",
+      "expected_return_date": "2025-04-09",
+      "actual_return_date": "2025-04-16"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 27,
+    "fields": {
+      "created_at": "2025-03-24 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-04",
+      "expected_return_date": "2025-03-10",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 28,
+    "fields": {
+      "created_at": "2025-05-13 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-05-11",
+      "expected_return_date": "2025-05-14",
+      "actual_return_date": "2025-05-21"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 29,
+    "fields": {
+      "created_at": "2025-03-30 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-10",
+      "expected_return_date": "2025-03-16",
+      "actual_return_date": "2025-03-26"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 30,
+    "fields": {
+      "created_at": "2025-04-30 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-11",
+      "expected_return_date": "2025-03-26",
+      "actual_return_date": "2025-03-28"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 31,
+    "fields": {
+      "created_at": "2025-04-09 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-20",
+      "expected_return_date": "2025-03-26",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 32,
+    "fields": {
+      "created_at": "2025-03-31 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-11",
+      "expected_return_date": "2025-03-17",
+      "actual_return_date": "2025-03-18"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 33,
+    "fields": {
+      "created_at": "2025-05-07 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-17",
+      "expected_return_date": "2025-04-23",
+      "actual_return_date": "2025-05-02"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 34,
+    "fields": {
+      "created_at": "2025-03-28 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-03-26",
+      "expected_return_date": "2025-03-29",
+      "actual_return_date": "2025-04-02"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 35,
+    "fields": {
+      "created_at": "2025-05-01 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-12",
+      "expected_return_date": "2025-03-27",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 36,
+    "fields": {
+      "created_at": "2025-04-30 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-10",
+      "expected_return_date": "2025-04-16",
+      "actual_return_date": "2025-04-28"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 37,
+    "fields": {
+      "created_at": "2025-04-29 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-10",
+      "expected_return_date": "2025-03-25",
+      "actual_return_date": "2025-04-06"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 38,
+    "fields": {
+      "created_at": "2025-05-17 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-27",
+      "expected_return_date": "2025-05-03",
+      "actual_return_date": "2025-05-04"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 39,
+    "fields": {
+      "created_at": "2025-03-30 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-01-11",
+      "expected_return_date": "2025-02-23",
+      "actual_return_date": "2025-03-01"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 40,
+    "fields": {
+      "created_at": "2025-05-03 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-13",
+      "expected_return_date": "2025-04-19",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 41,
+    "fields": {
+      "created_at": "2025-04-14 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-12",
+      "expected_return_date": "2025-04-15",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 42,
+    "fields": {
+      "created_at": "2025-04-11 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-09",
+      "expected_return_date": "2025-04-12",
+      "actual_return_date": "2025-04-14"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 43,
+    "fields": {
+      "created_at": "2025-05-01 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-29",
+      "expected_return_date": "2025-05-02",
+      "actual_return_date": "2025-05-06"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 44,
+    "fields": {
+      "created_at": "2025-04-04 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-02",
+      "expected_return_date": "2025-04-05",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 45,
+    "fields": {
+      "created_at": "2025-05-04 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-15",
+      "expected_return_date": "2025-03-30",
+      "actual_return_date": "2025-04-06"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 46,
+    "fields": {
+      "created_at": "2025-04-05 13:50:00",
+      "user": 5,
+      "book": 13,
+      "borrow_date": "2025-04-03",
+      "expected_return_date": "2025-04-06",
+      "actual_return_date": null
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 47,
+    "fields": {
+      "created_at": "2025-04-06 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-01-18",
+      "expected_return_date": "2025-03-02",
+      "actual_return_date": "2025-03-15"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 48,
+    "fields": {
+      "created_at": "2025-05-15 13:50:00",
+      "user": 7,
+      "book": 15,
+      "borrow_date": "2025-02-26",
+      "expected_return_date": "2025-04-10",
+      "actual_return_date": "2025-04-13"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 49,
+    "fields": {
+      "created_at": "2025-05-15 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-04-25",
+      "expected_return_date": "2025-05-01",
+      "actual_return_date": "2025-05-14"
+    }
+  },
+  {
+    "model": "borrowings.borrowing",
+    "pk": 50,
+    "fields": {
+      "created_at": "2025-04-06 13:49:00",
+      "user": 7,
+      "book": 12,
+      "borrow_date": "2025-03-17",
+      "expected_return_date": "2025-03-23",
+      "actual_return_date": "2025-03-24"
+    }
+  }
+]
