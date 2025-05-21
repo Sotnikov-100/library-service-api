@@ -25,3 +25,11 @@ class PaymentSerializer(serializers.ModelSerializer):
             "type",
             "money_to_pay",
         ]
+class PaymentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = [
+            "borrowing",
+            "type",
+            "money_to_pay",
+        ]

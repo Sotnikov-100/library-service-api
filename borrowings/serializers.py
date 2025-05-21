@@ -7,6 +7,7 @@ from books.models import Book
 from books.serializers import BookSerializer
 from borrowings.models import Borrowing
 from payments.models import Payment, PaymentStatus
+from payments.services import create_payment_with_stripe_session, create_fine_payment
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
@@ -55,7 +56,14 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         book = validated_data["book"]
         book.inventory -= 1
         book.save(update_fields=["inventory"])
+        
+        # Add user to validated_data
+        validated_data["user"] = self.context["request"].user
         borrowing = Borrowing.objects.create(**validated_data)
+        
+        # Create payment with Stripe session in one transaction
+        create_payment_with_stripe_session(borrowing, self.context["request"])
+        
         return borrowing
 
     def validate(self, attrs):
@@ -112,6 +120,10 @@ class BorrowingReturnUpdateSerializer(serializers.ModelSerializer):
         instance.book.inventory += 1
         instance.book.save(update_fields=["inventory"])
         instance.save(update_fields=["actual_return_date"])
+
+        # Create fine payment if book is returned late
+        if instance.is_expired:
+            create_fine_payment(instance, self.context["request"])
 
         return instance
 

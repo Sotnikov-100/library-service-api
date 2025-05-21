@@ -1,23 +1,35 @@
-import stripe
 import os
-from rest_framework import viewsets, permissions, status
+
+import stripe
+from rest_framework import permissions, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
+from base.viewsets import ModelViewSet
 from payments.models import Payment, PaymentStatus
-from payments.serializers import PaymentSerializer
 from payments.permissions import IsAdminOrOwner
-from payments.services import create_stripe_session, send_telegram_notification
+from payments.serializers import PaymentSerializer, PaymentCreateSerializer
+from payments.services import create_stripe_session, send_telegram_notification, create_payment_with_stripe_session
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 
-class PaymentViewSet(viewsets.ModelViewSet):
+class PaymentViewSet(ModelViewSet):
     queryset = Payment.objects.all().select_related(
         "borrowing__user", "borrowing__book"
     )
-    serializer_class = PaymentSerializer
+    request_serializer_class = PaymentCreateSerializer
+    response_serializer_class = PaymentSerializer
+
+    request_action_serializer_classes = {
+        "create": PaymentCreateSerializer,
+        "list": PaymentCreateSerializer,
+    }
+    response_action_serializer_classes = {
+        "list": PaymentSerializer,
+        "create": PaymentSerializer,
+    }
     permission_classes = [permissions.IsAuthenticated, IsAdminOrOwner]
 
     def get_queryset(self):
@@ -28,7 +40,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         payment = serializer.save()
-        create_stripe_session(payment, self.request)
+        create_payment_with_stripe_session(payment.borrowing, self.request)
         return payment
 
     @action(detail=True, methods=["GET"], url_path="success")
