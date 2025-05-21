@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from users.serializers import UserSerializer
@@ -17,6 +17,7 @@ class CreateUserView(generics.CreateAPIView):
     This is a public endpoint (no authentication required)
     """
     serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
 
     @get_register_user_schema()
     def post(self, request, *args, **kwargs):
