@@ -10,7 +10,8 @@ from borrowings.permissions import IsAuthenticatedOnly
 from borrowings.serializers import (
     BorrowingSerializer,
     BorrowingCreateSerializer,
-    BorrowingReturnUpdateSerializer, BorrowingRetrieveSerializer,
+    BorrowingReturnUpdateSerializer,
+    BorrowingRetrieveSerializer,
 )
 from borrowings.docs import(
     get_borrowings_create_schema,
@@ -51,13 +52,12 @@ class BorrowingViewSet(viewsets.ModelViewSet):
             if user_id:
                 queryset = queryset.filter(user_id=user_id)
 
-
-        queryset = queryset.annotate(
-            is_active_calc=ExpressionWrapper(
-                Q(actual_return_date__isnull=True),
-                output_field=BooleanField()
-            )
-        )
+          queryset = queryset.annotate(
+              is_active_calc=ExpressionWrapper(
+                  Q(actual_return_date__isnull=True),
+                  output_field=BooleanField()
+              )
+          )
 
         is_active = self.request.query_params.get("is_active")
         if is_active is not None:
