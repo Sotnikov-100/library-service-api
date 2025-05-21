@@ -42,7 +42,7 @@ services:
         condition: service_healthy
       library_db:
         condition: service_healthy
-    restart: always
+    restart: on-failure
 
 # Periodic tasks
   celery_beat:
@@ -127,6 +127,23 @@ services:
       library_db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+    restart: always
+
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library-flower
+    command: "celery -A config flower --address=0.0.0.0"
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      library_db:
         condition: service_healthy
     restart: always
 

@@ -63,7 +63,7 @@ def create_payment_for_borrowing(borrowing: Borrowing) -> Payment:
 
 
 @transaction.atomic
-def create_fine_payment(borrowing: Borrowing) -> Payment:
+def create_fine_payment(borrowing: Borrowing) -> Payment | None:
     if not borrowing.is_expired:
         return None
 
