@@ -14,6 +14,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -43,7 +44,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party apps
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "debug_toolbar",
+    "django_celery_beat",
+    "django_celery_results",
     "drf_spectacular",
     # local apps
     "books",
@@ -147,23 +151,66 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # debug toolbar settings
 INTERNAL_IPS = ["127.0.0.1", "172.17.0.1", *[f"172.18.0.{i}" for i in range(1, 20)]]
 
+TELEGRAM_BOT_NAME = os.getenv("TELEGRAM_BOT_NAME", "default_bot_name")
+TELEGRAM_API_TOKEN = os.getenv("TELEGRAM_API_TOKEN", "default_token")
+
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": (
-       "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication"
     ),
+    "DEFAULT_SCHEMA_CLASS": "base.openapi.RequestResponseAutoSchema",
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
 }
 
 SIMPLE_JWT = {
+    "AUTH_HEADER_NAME": "HTTP_X_ACCESS_TOKEN",
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
     "ROTATE_REFRESH_TOKENS": True,
 }
 
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+
+CELERY_BEAT_SCHEDULE = {
+    "check-expired-payments": {
+        "task": "payments.tasks.check_expired_payments",
+        "schedule": crontab(minute="*/1"),
+    },
+}
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", default="redis://localhost:6379/")
+CELERY_RESULT_BACKEND = os.getenv(
+    "CELERY_RESULT_BACKEND", default="redis://localhost:6379/"
+)
+CELERY_TIMEZONE = "Europe/Kiev"
+CELERY_TASK_TRACK_STARTED = True
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{os.getenv('REDIS_HOST')}:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Library service API",
-    "DESCRIPTION": "Library service API",
-    "VERSION": "0.1.0",
+    "TITLE": "Library API Service",
+    "DESCRIPTION": "Library API Service",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": True,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SORT_OPERATIONS": False,
+    "ENABLE_DJANGO_DEPLOY_CHECK": False,
+    "DISABLE_ERRORS_AND_WARNINGS": True,
 }

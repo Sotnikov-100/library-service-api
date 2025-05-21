@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "last_login",
             "date_joined",
-            "profile_image"
+            "profile_image",
         )
         read_only_fields = (
             "id",
@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
             "profile_image": {
                 "required": False,
                 "allow_null": True,
-            }
+            },
         }
 
     def create(self, validated_data):
