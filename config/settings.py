@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Third-party apps
     "rest_framework",
     "debug_toolbar",
+    "drf_spectacular",
     # local apps
     "books",
     "users",
@@ -147,13 +148,22 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 INTERNAL_IPS = ["127.0.0.1", "172.17.0.1", *[f"172.18.0.{i}" for i in range(1, 20)]]
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": (
        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication"
+    ),
 }
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
     "ROTATE_REFRESH_TOKENS": True,
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Library service API",
+    "DESCRIPTION": "Library service API",
+    "VERSION": "0.1.0",
 }
