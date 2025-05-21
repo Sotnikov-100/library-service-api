@@ -52,10 +52,6 @@ def get_book_list_schema():
                 response_only=True
             )
         ],
-        responses={
-            200: BookSerializer(many=True),
-            400: OpenApiResponse(description="Invalid search parameter")
-        }
     )
 
 
@@ -76,11 +72,6 @@ def get_book_create_schema():
                 response_only=True
             )
         ],
-        responses={
-            201: BookSerializer,
-            400: OpenApiResponse(description="Invalid input data"),
-            403: OpenApiResponse(description="Permission denied")
-        }
     )
 
 def get_book_retrieve_schema():
@@ -105,12 +96,6 @@ def get_book_update_schema():
         summary="Full book update",
         description="Full update of all book fields. Admin only.",
         request=BookCreateUpdateSerializer,
-        responses={
-            200: BookSerializer,
-            400: OpenApiResponse(description="Invalid input data"),
-            403: OpenApiResponse(description="Permission denied"),
-            404: OpenApiResponse(description="Book not found")
-        },
         examples=[
             OpenApiExample(
                 "Example request",
@@ -125,12 +110,6 @@ def get_book_partial_update_schema():
         summary="Partial book update",
         description="Update some book fields. Admin only.",
         request=BookCreateUpdateSerializer,
-        responses={
-            200: BookSerializer,
-            400: OpenApiResponse(description="Invalid input data"),
-            403: OpenApiResponse(description="Permission denied"),
-            404: OpenApiResponse(description="Book not found")
-        },
         examples=[
             OpenApiExample(
                 "Example request",
@@ -147,9 +126,4 @@ def get_book_delete_schema():
     return extend_schema(
         summary="Delete book",
         description="Delete book from database. Admin only.",
-        responses={
-            204: OpenApiResponse(description="No content - successful deletion"),
-            403: OpenApiResponse(description="Permission denied"),
-            404: OpenApiResponse(description="Book not found")
-        }
     )
