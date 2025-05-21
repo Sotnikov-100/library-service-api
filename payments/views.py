@@ -11,8 +11,9 @@ from payments.models import Payment, PaymentStatus
 from payments.serializers import PaymentSerializer
 from payments.permissions import IsAdminOrOwner
 from payments.services import create_stripe_session, send_telegram_notification
-from payments.docs import(
+from payments.docs import (
     get_payments_cancel_schema,
+    get_payments_create_schema,
     get_payments_list_schema,
     get_payments_retrieve_schema,
     get_payments_success_schema,
@@ -107,7 +108,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
-    @extend_schema(exclude=True)
+    @get_payments_create_schema()
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
