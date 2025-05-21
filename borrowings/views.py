@@ -6,6 +6,7 @@ from django.db.models import BooleanField, ExpressionWrapper, Q
 
 from borrowings.models import Borrowing
 from borrowings.pagiantion import BorrowingSetPagination
+from borrowings.permissions import IsAuthenticatedOnly
 from borrowings.serializers import (
     BorrowingSerializer,
     BorrowingCreateSerializer,

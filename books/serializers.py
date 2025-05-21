@@ -1,23 +1,15 @@
 from rest_framework import serializers
-from rest_framework.relations import PrimaryKeyRelatedField
-
 from authors.models import Author, BookAuthor
 from books.models import Book
 from authors.serializers import AuthorSerializer
+
 
 class BookSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(read_only=True, many=True)
 
     class Meta:
         model = Book
-        fields = (
-            "id",
-            "title",
-            "inventory",
-            "cover",
-            "daily_fee",
-            "authors"
-        )
+        fields = ("id", "title", "inventory", "cover", "daily_fee", "authors")
 
 
 class BookCreateUpdateSerializer(serializers.ModelSerializer):
@@ -25,16 +17,10 @@ class BookCreateUpdateSerializer(serializers.ModelSerializer):
         queryset=Author.objects.all(),
         many=True,
     )
+
     class Meta:
         model = Book
-        fields = (
-            "id",
-            "title",
-            "inventory",
-            "cover",
-            "daily_fee",
-            "authors"
-        )
+        fields = ("id", "title", "inventory", "cover", "daily_fee", "authors")
 
     def validate_daily_fee(self, value):
         if value < 0:
