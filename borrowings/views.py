@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -45,7 +46,6 @@ class BorrowingViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(user_id=user_id)
 
 
-
         queryset = queryset.annotate(
             is_active_calc=ExpressionWrapper(
                 Q(actual_return_date__isnull=True),
@@ -79,6 +79,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         context["request"] = self.request
         return context
 
+    @extend_schema(exclude=True)
     @action(detail=True, methods=["post"], url_path="return")
     def return_borrowing(self, request, pk=None):
         borrowing = self.get_object()
@@ -92,7 +93,6 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    #DOCs
     @get_borrowings_list_schema()
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -104,6 +104,10 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     @get_borrowings_retrieve_schema()
     def retrieve(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    @extend_schema(exclude=True)
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
 
     @get_borrowings_partial_update_schema()
     def partial_update(self, request, *args, **kwargs):
