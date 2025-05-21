@@ -83,7 +83,7 @@ class TelegramAccountViewSet(ModelViewSet):
 
 class TelegramAccountRegisterView(CreateAPIView):
     """
-    Registers a Telegram account for the current authenticated user.
+    Registers an account(on the website) for the current user on Telegram.
     """
 
     request_serializer_class = TelegramAccountCreateSerializer
