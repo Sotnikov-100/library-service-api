@@ -6,10 +6,11 @@ from django.db.models import BooleanField, ExpressionWrapper, Q
 
 from borrowings.models import Borrowing
 from borrowings.pagiantion import BorrowingSetPagination
+from borrowings.permissions import IsAuthenticatedOnly
 from borrowings.serializers import (
     BorrowingSerializer,
     BorrowingCreateSerializer,
-    BorrowingReturnUpdateSerializer,
+    BorrowingReturnUpdateSerializer, BorrowingRetrieveSerializer,
 )
 from borrowings.docs import(
     get_borrowings_create_schema,
@@ -34,29 +35,33 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     queryset = Borrowing.objects.select_related("book", "user")
     serializer_class = BorrowingSerializer
     pagination_class = BorrowingSetPagination
+    permission_classes = (IsAuthenticatedOnly,)
 
     def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return Borrowing.objects.none()
+
         queryset = self.queryset
+
         if not self.request.user.is_staff:
-            queryset = self.queryset.filter(user=self.request.user)
+            queryset = queryset.filter(user=self.request.user)
 
         if self.request.user.is_staff:
             user_id = self.request.query_params.get("user_id", None)
             if user_id:
                 queryset = queryset.filter(user_id=user_id)
 
+          queryset = queryset.annotate(
+              is_active_calc=ExpressionWrapper(
+                  Q(actual_return_date__isnull=True),
+                  output_field=BooleanField()
+              )
+          )
 
-        queryset = queryset.annotate(
-            is_active_calc=ExpressionWrapper(
-                Q(actual_return_date__isnull=True),
-                output_field=BooleanField()
-            )
-        )
-
-        is_active = self.request.query_params.get("is_active")
-        if is_active is not None:
-            is_active = is_active.lower() == "true"
-            queryset = queryset.filter(is_active_calc=is_active)
+          is_active = self.request.query_params.get("is_active")
+          if is_active is not None:
+              is_active = is_active.lower() == "true"
+              queryset = queryset.filter(is_active_calc=is_active)
 
         return queryset
 
@@ -72,6 +77,9 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
         if self.action in ("update", "partial_update"):
             return BorrowingReturnUpdateSerializer
+
+        if self.action == "retrieve":
+            return BorrowingRetrieveSerializer
         return self.serializer_class
 
     def get_serializer_context(self):
