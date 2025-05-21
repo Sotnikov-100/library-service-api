@@ -43,27 +43,6 @@ def get_payments_retrieve_schema():
         ]
     )
 
-def get_payments_create_schema():
-    return extend_schema(
-        summary="Create new payment",
-        description="New payment automatically is created when created new borrowing.",
-        examples=[
-            OpenApiExample(
-                "Example response",
-                value={
-                    "id": 1,
-                    "borrowing": "1",
-                    "status": "PENDING",
-                    "type": "PAYMENT",
-                    "session_url": "https://checkout.stripe.com/session_123",
-                    "money_to_pay": "10.00",
-                    "created_at": "2023-01-01T12:00:00"
-                },
-                response_only=True
-            )
-        ]
-    )
-
 def get_payments_success_schema():
     return extend_schema(
         summary="Payment success",
