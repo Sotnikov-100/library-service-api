@@ -52,6 +52,9 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            validated_data["user"] = request.user
         book = validated_data["book"]
         book.inventory -= 1
         book.save(update_fields=["inventory"])
