@@ -85,6 +85,7 @@ class PaymentViewSet(ModelViewSet):
                 {"status": "error", "message": str(e)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
     @get_payments_cancel_schema()
     @action(detail=True, methods=["GET"], url_path="cancel")
     def payment_cancel(self, request, pk=None):
