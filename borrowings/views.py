@@ -18,6 +18,10 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
+
+        if self.request.user.is_anonymous:
+            return Borrowing.objects.none()
+
         if not self.request.user.is_staff:
             queryset = self.queryset.filter(user=self.request.user)
 

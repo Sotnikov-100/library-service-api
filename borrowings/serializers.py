@@ -4,11 +4,13 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from books.models import Book
+from books.serializers import BookSerializer
 from borrowings.models import Borrowing
 from payments.models import Payment, PaymentStatus
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
+    book = BookSerializer(many=False, read_only=True)
     def validate(self, attrs):
         if attrs["expected_return_date"] <= attrs["borrow_date"]:
             raise ValidationError(
@@ -28,7 +30,8 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "borrow_date",
             "expected_return_date",
             "actual_return_date",
-            "is_active"
+            "is_active",
+            "book",
         )
         ordering = ["-actual_return_date", "-borrow_date"]
 
