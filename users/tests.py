@@ -113,7 +113,7 @@ class ManageUserViewTests(APITestCase):
     def authenticate(self):
         refresh = RefreshToken.for_user(self.user)
         self.client.credentials(
-            HTTP_AUTHORIZATION=f"Bearer {str(refresh.access_token)}"
+            HTTP_X_ACCESS_TOKEN=f"Bearer {str(refresh.access_token)}"
         )
 
     def test_authenticated_user_can_retrieve_own_profile(self):

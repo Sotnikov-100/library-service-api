@@ -2,6 +2,9 @@ import os
 
 import stripe
 from rest_framework import permissions, status
+
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -11,11 +14,28 @@ from payments.models import Payment, PaymentStatus
 from payments.permissions import IsAdminOrOwner
 from payments.serializers import PaymentSerializer, PaymentCreateSerializer
 from payments.services import create_stripe_session, send_telegram_notification, create_payment_with_stripe_session
+from payments.services import create_stripe_session, send_telegram_notification
+from payments.docs import (
+    get_payments_cancel_schema,
+    get_payments_create_schema,
+    get_payments_list_schema,
+    get_payments_retrieve_schema,
+    get_payments_success_schema,
+    get_renew_session_schema
+)
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 
 class PaymentViewSet(ModelViewSet):
+    """
+        Handles payment operations related to borrowings.
+
+        ***Permissions:***
+
+        - Only authenticated users can access.
+        - Admins see all payments, regular users see only their own
+    """
     queryset = Payment.objects.all().select_related(
         "borrowing__user", "borrowing__book"
     )
@@ -43,6 +63,7 @@ class PaymentViewSet(ModelViewSet):
         create_payment_with_stripe_session(payment.borrowing, self.request)
         return payment
 
+    @get_payments_success_schema()
     @action(detail=True, methods=["GET"], url_path="success")
     def payment_success(self, request, pk=None):
         payment = self.get_object()
@@ -64,7 +85,7 @@ class PaymentViewSet(ModelViewSet):
                 {"status": "error", "message": str(e)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
+    @get_payments_cancel_schema()
     @action(detail=True, methods=["GET"], url_path="cancel")
     def payment_cancel(self, request, pk=None):
         return Response(
@@ -76,9 +97,11 @@ class PaymentViewSet(ModelViewSet):
             status=status.HTTP_200_OK,
         )
 
+    @extend_schema(exclude=True)
     def destroy(self, request, *args, **kwargs):
         raise PermissionDenied("Deleting payments is not allowed.")
 
+    @get_renew_session_schema()
     @action(detail=True, methods=["POST"])
     def renew_session(self, request, pk=None):
         payment = self.get_object()
@@ -88,3 +111,23 @@ class PaymentViewSet(ModelViewSet):
             )
         create_stripe_session(payment, request)
         return Response({"session_url": payment.session_url})
+
+    @get_payments_list_schema()
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @get_payments_retrieve_schema()
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @get_payments_create_schema()
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(exclude=True)
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @extend_schema(exclude=True)
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)

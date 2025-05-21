@@ -1,18 +1,38 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.db.models import BooleanField, ExpressionWrapper, Q
+
 from borrowings.models import Borrowing
 from borrowings.pagiantion import BorrowingSetPagination
 from borrowings.permissions import IsAuthenticatedOnly
 from borrowings.serializers import (
     BorrowingSerializer,
     BorrowingCreateSerializer,
-    BorrowingReturnUpdateSerializer, BorrowingRetrieveSerializer,
+    BorrowingReturnUpdateSerializer,
+    BorrowingRetrieveSerializer,
+)
+from borrowings.docs import(
+    get_borrowings_create_schema,
+    get_borrowings_delete_schema,
+    get_borrowings_list_schema,
+    get_borrowings_partial_update_schema,
+    get_borrowings_retrieve_schema
 )
 
 
 class BorrowingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows borrowings to be viewed or edited.
+
+    ***Access:***
+
+    - Regular users see their own borrowings.
+    - Staff users: see all borrowings and can filter them by id.
+
+    """
+
     queryset = Borrowing.objects.select_related("book", "user")
     serializer_class = BorrowingSerializer
     pagination_class = BorrowingSetPagination
@@ -68,6 +88,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         context["request"] = self.request
         return context
 
+    @extend_schema(exclude=True)
     @action(detail=True, methods=["post"], url_path="return")
     def return_borrowing(self, request, pk=None):
         borrowing = self.get_object()
@@ -80,3 +101,27 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @get_borrowings_list_schema()
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @get_borrowings_create_schema()
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @get_borrowings_retrieve_schema()
+    def retrieve(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema(exclude=True)
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @get_borrowings_partial_update_schema()
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @get_borrowings_delete_schema()
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)

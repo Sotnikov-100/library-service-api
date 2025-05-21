@@ -10,9 +10,10 @@ class BookAuthorInline(admin.TabularInline):
     can_delete = False
     autocomplete_fields = ["author"]
 
+
 @admin.register(Book)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ("title", "cover", "inventory", "daily_fee", "image")
     search_fields = ("title",)
-    list_filter = ("title","inventory", "authors")
+    list_filter = ("title", "inventory", "authors")
     inlines = (BookAuthorInline,)

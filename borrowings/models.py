@@ -19,6 +19,10 @@ class Borrowing(models.Model):
     expected_return_date = models.DateField(null=False, blank=False)
     actual_return_date = models.DateField(null=True, blank=True)
 
+    def __str__(self):
+        status = "active" if self.is_active else f"returned on {self.actual_return_date}"
+        return f"{self.user} borrowed '{self.book.title}' on {self.borrow_date} ({status})"
+
     def clean(self: "Borrowing") -> None:
         if self.expected_return_date <= self.borrow_date:
             raise ValidationError(
