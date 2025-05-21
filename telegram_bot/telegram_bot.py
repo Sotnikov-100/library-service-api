@@ -48,7 +48,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "- Getting notifications about your book borrowings\n"
         "- Receiving updates about payments\n"
         "- Staying informed about library events\n\n"
-        "Use /register to link your account\n"
+        "Use /tgregister to link your account\n"
         "Use /help to see all available commands"
     )
 
@@ -71,8 +71,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/info - Get bot information\n"
         "/help - Show this help message\n"
         "/get_chat_id - Get your chat ID\n"
-        "/register - Link your account\n"
-        "/unregister - Unlink your account"
+        "/tgregister - Link your account\n"
+        "/tgunregister - Unlink your account"
     )
 
 
@@ -85,7 +85,7 @@ async def get_chat_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def tgregister(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     try:
@@ -96,7 +96,7 @@ async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(
                 "This Telegram account is already registered!\n"
                 f"It is linked to user: {account_info['username']}\n\n"
-                "Use /unregister if you want to unlink this account."
+                "Use /tgunregister if you want to unlink this account."
             )
             return ConversationHandler.END
 
@@ -169,29 +169,24 @@ async def handle_email_input(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return ConversationHandler.END
 
 
-async def unregister(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def tgunregister(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     try:
-        result = delete_telegram_account_task.delay(str(chat_id))
-        success = result.get(timeout=5)  # wait for result
+        # Just send the task to Celery, do not wait for the result.
+        delete_telegram_account_task.delay(str(chat_id))
 
-        if success:
-            await update.message.reply_text(
-                "✅ Your Telegram account has been successfully unlinked.\n"
-                "You will no longer receive notifications."
-            )
-        else:
-            await update.message.reply_text(
-                "❌ Failed to unlink your Telegram account.\n"
-                "Please try again or contact support."
-            )
+        # Immediately inform the user that their request is being processed.
+        await update.message.reply_text(
+            "Unlink request received. You will get a confirmation message soon."
+        )
     except Exception as e:
         logger.error(f"Unregistration error: {str(e)}")
         await update.message.reply_text(
-            "❌ An error occurred while unregistering.\n"
+            "An error occurred while unlinking your account.\n"
             "Please try again later or contact the administrator."
         )
+
 
 
 async def set_commands(application):
@@ -200,8 +195,8 @@ async def set_commands(application):
         BotCommand("info", "Bot information"),
         BotCommand("help", "Show help message"),
         BotCommand("get_chat_id", "Retrieve your chat ID"),
-        BotCommand("register", "Register your account"),
-        BotCommand("unregister", "Unregister your account"),
+        BotCommand("tgregister", "Register your account to receive notifications"),
+        BotCommand("tgunregister", "Unregister your account"),
     ]
     await application.bot.set_my_commands(commands)
 
@@ -214,7 +209,7 @@ def main():
     app = ApplicationBuilder().token(TOKEN).build()
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("register", register)],
+        entry_points=[CommandHandler("tgregister", tgregister)],
         states={
             EMAIL_INPUT: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, handle_email_input)
@@ -227,7 +222,7 @@ def main():
     app.add_handler(CommandHandler("info", info))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("get_chat_id", get_chat_id))
-    app.add_handler(CommandHandler("unregister", unregister))
+    app.add_handler(CommandHandler("tgunregister", tgunregister))
     app.add_handler(conv_handler)
 
     app.post_init = set_commands

@@ -128,7 +128,7 @@ AUTH_USER_MODEL = "users.User"
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Kiev"
 
 USE_I18N = True
 
@@ -174,13 +174,6 @@ SIMPLE_JWT = {
 }
 
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
-
-CELERY_BEAT_SCHEDULE = {
-    "check-expired-payments": {
-        "task": "payments.tasks.check_expired_payments",
-        "schedule": crontab(minute="*/1"),
-    },
-}
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", default="redis://localhost:6379/")
 CELERY_RESULT_BACKEND = os.getenv(
