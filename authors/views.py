@@ -1,10 +1,14 @@
 from rest_framework import viewsets, permissions
-
-from authors.docs import get_author_create_schema, get_author_delete_schema, get_author_list_schema, \
-    get_author_partial_update_schema, \
-    get_author_retrieve_schema, get_author_update_schema
 from authors.models import Author
 from authors.serializers import AuthorSerializer
+from authors.docs import(
+    get_author_create_schema,
+    get_author_delete_schema,
+    get_author_list_schema,
+    get_author_partial_update_schema,
+    get_author_retrieve_schema,
+    get_author_update_schema
+)
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
