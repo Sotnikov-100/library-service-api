@@ -1,26 +1,24 @@
 import os
+
+import requests
 import stripe
 from django.db import transaction
 from decimal import Decimal
 from django.urls import reverse
-import requests
-import logging
 from borrowings.models import Borrowing
 from payments.models import Payment, PaymentType
 
-logger = logging.getLogger(__name__)
-
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 FINE_MULTIPLIER = 2
-
 
 def calc_payment_amount(borrowing: Borrowing) -> Decimal:
     days = (borrowing.expected_return_date - borrowing.borrow_date).days + 1
     return borrowing.book.daily_fee * days
 
-
-def create_stripe_session(payment: Payment, request):
-    logger.info(f"Creating Stripe session for payment ID: {payment.id}")
+def create_stripe_session(payment: Payment, request) -> None:
+    """
+    Creates Stripe session for payment and updates payment with session info.
+    """
     success_url = request.build_absolute_uri(
         reverse("payments:payment-success", args=[payment.id])
     )
@@ -35,7 +33,7 @@ def create_stripe_session(payment: Payment, request):
                 "price_data": {
                     "currency": "usd",
                     "product_data": {
-                        "name": f"Book rental: {payment.borrowing.book.title}",
+                        "name": f"{'Late return fine' if payment.type == PaymentType.FINE else 'Book rental'}: {payment.borrowing.book.title}",
                     },
                     "unit_amount": int(payment.money_to_pay * 100),
                 },
@@ -52,28 +50,41 @@ def create_stripe_session(payment: Payment, request):
     payment.session_id = session.id
     payment.save()
 
-
 @transaction.atomic
-def create_payment_for_borrowing(borrowing: Borrowing) -> Payment:
+def create_payment_with_stripe_session(borrowing: Borrowing, request) -> Payment:
+    """
+    Creates a payment for borrowing and its Stripe session in one transaction.
+    """
+    # Create payment
     amount = calc_payment_amount(borrowing)
     payment = Payment.objects.create(
         borrowing=borrowing, money_to_pay=amount, type=PaymentType.PAYMENT
     )
+
+    # Create Stripe session
+    create_stripe_session(payment, request)
     return payment
 
-
 @transaction.atomic
-def create_fine_payment(borrowing: Borrowing) -> Payment | None:
+def create_fine_payment(borrowing: Borrowing, request) -> Payment | None:
+    """
+    Creates a fine payment for late return with Stripe session.
+    """
     if not borrowing.is_expired:
         return None
 
     fine_amount = borrowing.calculate_fine_amount(FINE_MULTIPLIER)
-
+    
+    # Create payment
     payment = Payment.objects.create(
-        borrowing=borrowing, money_to_pay=fine_amount, type=PaymentType.FINE
+        borrowing=borrowing, 
+        money_to_pay=fine_amount, 
+        type=PaymentType.FINE
     )
-    return payment
 
+    # Create Stripe session
+    create_stripe_session(payment, request)
+    return payment
 
 def send_telegram_notification(payment: Payment):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")

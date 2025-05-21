@@ -62,6 +62,9 @@ class Borrowing(models.Model):
     def calculate_fine_amount(self: "Borrowing", multiplier: int = 2) -> Decimal:
         return self.book.daily_fee * self.expired_days * multiplier
 
+    def __str__(self):
+        return f"{self.user.email} - {self.book.title}"
+
     class Meta:
         ordering = ["-actual_return_date", "expected_return_date"]
         verbose_name_plural = "borrowings"

@@ -10,6 +10,7 @@ class PaymentAdmin(admin.ModelAdmin):
         "type",
         "money_to_pay",
         "created_at",
+        "session_url"
     )
     list_filter = ("status", "type", "created_at")
     search_fields = ("borrowing__user__email", "session_id")
