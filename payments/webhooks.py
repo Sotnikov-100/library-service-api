@@ -5,8 +5,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
+
+from notifications.telegram_bot import TelegramNotificationService
 from payments.models import Payment, PaymentStatus
-from payments.services import send_telegram_notification
 
 logger = logging.getLogger(__name__)
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
@@ -43,7 +44,7 @@ def stripe_webhook(request):
 
 def handle_checkout_session(session):
     logger.info(f"Handling session: {session.id} (status: {session.payment_status})")
-
+    tg_service = TelegramNotificationService()
     try:
         payment = Payment.objects.get(session_id=session.id)
         if session.payment_status == "paid" and payment.status != PaymentStatus.PAID:
@@ -52,7 +53,7 @@ def handle_checkout_session(session):
             logger.info(f"Payment {payment.id} marked as PAID")
 
             if payment.borrowing:
-                send_telegram_notification(payment)
+                tg_service.send(message=payment.status, chat_id=payment.borrowing.user.telegram_account.chat_id)
 
     except Payment.DoesNotExist:
         logger.warning(

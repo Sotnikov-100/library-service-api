@@ -1,20 +1,20 @@
 import os
 
 import stripe
-from rest_framework import permissions, status
 
 from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets, permissions, status
+from rest_framework import permissions, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
 from base.viewsets import ModelViewSet
+from notifications.telegram_bot import TelegramNotificationService
 from payments.models import Payment, PaymentStatus
 from payments.permissions import IsAdminOrOwner
 from payments.serializers import PaymentSerializer, PaymentCreateSerializer
-from payments.services import create_stripe_session, send_telegram_notification, create_payment_with_stripe_session
-from payments.services import create_stripe_session, send_telegram_notification
+from payments.services import create_payment_with_stripe_session, create_stripe_session
+
 from payments.docs import (
     get_payments_cancel_schema,
     get_payments_create_schema,
@@ -31,7 +31,7 @@ class PaymentViewSet(ModelViewSet):
     """
         Handles payment operations related to borrowings.
 
-        ***Permissions:***
+        ***Permissions: ***
 
         - Only authenticated users can access.
         - Admins see all payments, regular users see only their own
@@ -66,18 +66,24 @@ class PaymentViewSet(ModelViewSet):
     @get_payments_success_schema()
     @action(detail=True, methods=["GET"], url_path="success")
     def payment_success(self, request, pk=None):
+        service = TelegramNotificationService()
         payment = self.get_object()
+        user_chat_id = payment.borrowing.user.telegram_account.chat_id
         try:
             session = stripe.checkout.Session.retrieve(payment.session_id)
             if session.payment_status == "paid":
                 payment.status = PaymentStatus.PAID
                 payment.save()
-                send_telegram_notification(payment)
+                message = "Payment completed successfully!"
+
+                service.send(message=message, chat_id=user_chat_id)
+
                 return Response(
-                    {"status": "success", "message": "Payment completed successfully!"}
+                    {"status": "Paid", "message": "Payment successfully complted."},
+                    status=status.HTTP_201_CREATED,
                 )
             return Response(
-                {"status": "pending", "message": "Payment is still pending."},
+                {"status": "Pending", "message": "Payment is pending. Please wait a moment."},
                 status=status.HTTP_202_ACCEPTED,
             )
         except stripe.error.StripeError as e:

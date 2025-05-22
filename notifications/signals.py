@@ -77,13 +77,12 @@ def payment_post_save(sender, instance, created, **kwargs):
             return
 
         message = (
-            f"{'New' if created else '💳 Updated'} payment:\n"
+            f"💳 Payment:\n"
             f"Amount: ${instance.money_to_pay}\n"
             f"Status: {instance.status}\n"
             f"Type: {instance.type}\n"
-            f"session_url: {instance.session_url}\n"
+            f"{f'session_url: {instance.session_url}\n' if instance.status == 'PENDING' else ''}"
             f"For book: {instance.borrowing.book.title}\n"
-            f"money to pay: {instance.money_to_pay}\n"
             f"created at: {instance.created_at}\n"
         )
 
