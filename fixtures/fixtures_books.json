@@ -1,0 +1,1102 @@
+[
+  {
+    "model": "books.book",
+    "pk": 1,
+    "fields": {
+      "title": "Our Dream from the Past",
+      "cover": "Hard",
+      "inventory": 40,
+      "daily_fee": "1.17",
+      "image": "books/book_8301a6a2.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 2,
+    "fields": {
+      "title": "Lost Promise of Time",
+      "cover": "Hard",
+      "inventory": 13,
+      "daily_fee": "2.89",
+      "image": "books/book_fd98c8e1.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 3,
+    "fields": {
+      "title": "Secret Story of Love",
+      "cover": "Hard",
+      "inventory": 48,
+      "daily_fee": "7.85",
+      "image": "books/book_305072f7.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 4,
+    "fields": {
+      "title": "Forgotten Book in the Dark",
+      "cover": "Soft",
+      "inventory": 20,
+      "daily_fee": "5.98",
+      "image": "books/book_26a533a6.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 5,
+    "fields": {
+      "title": "A Mystery of Love",
+      "cover": "Hard",
+      "inventory": 2,
+      "daily_fee": "7.11",
+      "image": "books/book_de7f5c5b.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 6,
+    "fields": {
+      "title": "Our Life from the Past",
+      "cover": "Hard",
+      "inventory": 10,
+      "daily_fee": "8.14",
+      "image": "books/book_1e524b66.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 7,
+    "fields": {
+      "title": "Your Journey of Time",
+      "cover": "Soft",
+      "inventory": 28,
+      "daily_fee": "0.75",
+      "image": "books/book_bae528b9.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 8,
+    "fields": {
+      "title": "My Book in the Dark",
+      "cover": "Hard",
+      "inventory": 11,
+      "daily_fee": "6.93",
+      "image": "books/book_8c44a758.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 9,
+    "fields": {
+      "title": "My Promise from the Past",
+      "cover": "Soft",
+      "inventory": 37,
+      "daily_fee": "8.91",
+      "image": "books/book_55fdafc0.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 10,
+    "fields": {
+      "title": "My Story of Love",
+      "cover": "Soft",
+      "inventory": 4,
+      "daily_fee": "4.67",
+      "image": "books/book_afeaddca.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 11,
+    "fields": {
+      "title": "The Dream from the Past",
+      "cover": "Hard",
+      "inventory": 24,
+      "daily_fee": "7.19",
+      "image": "books/book_68df20ad.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 12,
+    "fields": {
+      "title": "The Adventure in the Dark",
+      "cover": "Hard",
+      "inventory": 13,
+      "daily_fee": "1.11",
+      "image": "books/book_cc71d2d3.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 13,
+    "fields": {
+      "title": "Your Book of War",
+      "cover": "Soft",
+      "inventory": 32,
+      "daily_fee": "2.20",
+      "image": "books/book_bdaaf443.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 14,
+    "fields": {
+      "title": "A Book of War",
+      "cover": "Soft",
+      "inventory": 33,
+      "daily_fee": "8.21",
+      "image": "books/book_76de4155.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 15,
+    "fields": {
+      "title": "Your Story of Love",
+      "cover": "Hard",
+      "inventory": 7,
+      "daily_fee": "8.83",
+      "image": "books/book_12d1081b.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 16,
+    "fields": {
+      "title": "The Adventure of Time",
+      "cover": "Soft",
+      "inventory": 32,
+      "daily_fee": "4.29",
+      "image": "books/book_5b4c8e02.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 17,
+    "fields": {
+      "title": "My Story in the Dark",
+      "cover": "Soft",
+      "inventory": 15,
+      "daily_fee": "1.47",
+      "image": "books/book_cbb85345.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 18,
+    "fields": {
+      "title": "Your Dream with No Name",
+      "cover": "Soft",
+      "inventory": 16,
+      "daily_fee": "3.96",
+      "image": "books/book_3a1749bb.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 19,
+    "fields": {
+      "title": "The Book in the Dark",
+      "cover": "Hard",
+      "inventory": 33,
+      "daily_fee": "1.44",
+      "image": "books/book_cd2d6f3a.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 20,
+    "fields": {
+      "title": "Lost Mystery from the Past",
+      "cover": "Soft",
+      "inventory": 46,
+      "daily_fee": "6.55",
+      "image": "books/book_92e221aa.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 21,
+    "fields": {
+      "title": "Secret Book of War",
+      "cover": "Soft",
+      "inventory": 6,
+      "daily_fee": "1.26",
+      "image": "books/book_6b0670c8.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 22,
+    "fields": {
+      "title": "My Journey of War",
+      "cover": "Hard",
+      "inventory": 17,
+      "daily_fee": "6.05",
+      "image": "books/book_55e98771.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 23,
+    "fields": {
+      "title": "Their Book of Love",
+      "cover": "Hard",
+      "inventory": 44,
+      "daily_fee": "3.38",
+      "image": "books/book_08d160fb.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 24,
+    "fields": {
+      "title": "A Book of War",
+      "cover": "Hard",
+      "inventory": 38,
+      "daily_fee": "2.71",
+      "image": "books/book_63c47e21.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 25,
+    "fields": {
+      "title": "Your Life of Love",
+      "cover": "Hard",
+      "inventory": 20,
+      "daily_fee": "6.49",
+      "image": "books/book_714137dc.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 26,
+    "fields": {
+      "title": "Forgotten Story of War",
+      "cover": "Hard",
+      "inventory": 21,
+      "daily_fee": "6.31",
+      "image": "books/book_5ff4c88c.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 27,
+    "fields": {
+      "title": "Forgotten Mystery in the Dark",
+      "cover": "Soft",
+      "inventory": 23,
+      "daily_fee": "4.38",
+      "image": "books/book_5b863149.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 28,
+    "fields": {
+      "title": "Lost Journey of Time",
+      "cover": "Hard",
+      "inventory": 36,
+      "daily_fee": "9.53",
+      "image": "books/book_9408ffb6.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 29,
+    "fields": {
+      "title": "Lost Promise of War",
+      "cover": "Hard",
+      "inventory": 2,
+      "daily_fee": "4.64",
+      "image": "books/book_c5e7ee5a.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 30,
+    "fields": {
+      "title": "The Story in the Dark",
+      "cover": "Soft",
+      "inventory": 14,
+      "daily_fee": "0.92",
+      "image": "books/book_2901d704.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 31,
+    "fields": {
+      "title": "Your Mystery in the Dark",
+      "cover": "Hard",
+      "inventory": 27,
+      "daily_fee": "9.96",
+      "image": "books/book_3843adc6.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 32,
+    "fields": {
+      "title": "The Book of Time",
+      "cover": "Hard",
+      "inventory": 48,
+      "daily_fee": "2.54",
+      "image": "books/book_b2e615d2.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 33,
+    "fields": {
+      "title": "Secret Story from the Past",
+      "cover": "Soft",
+      "inventory": 47,
+      "daily_fee": "6.01",
+      "image": "books/book_f1714f70.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 34,
+    "fields": {
+      "title": "Lost Journey from the Past",
+      "cover": "Hard",
+      "inventory": 48,
+      "daily_fee": "6.79",
+      "image": "books/book_ec0210c0.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 35,
+    "fields": {
+      "title": "Our Promise from the Past",
+      "cover": "Soft",
+      "inventory": 35,
+      "daily_fee": "4.31",
+      "image": "books/book_6441a7c9.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 36,
+    "fields": {
+      "title": "Secret Story of Love",
+      "cover": "Soft",
+      "inventory": 12,
+      "daily_fee": "2.47",
+      "image": "books/book_7da56382.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 37,
+    "fields": {
+      "title": "Secret Life of Love",
+      "cover": "Hard",
+      "inventory": 5,
+      "daily_fee": "6.72",
+      "image": "books/book_ffc3a5b9.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 38,
+    "fields": {
+      "title": "Their Journey with No Name",
+      "cover": "Soft",
+      "inventory": 21,
+      "daily_fee": "9.92",
+      "image": "books/book_78249549.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 39,
+    "fields": {
+      "title": "The Book of Love",
+      "cover": "Hard",
+      "inventory": 6,
+      "daily_fee": "9.36",
+      "image": "books/book_ce129207.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 40,
+    "fields": {
+      "title": "A Book of Love",
+      "cover": "Soft",
+      "inventory": 41,
+      "daily_fee": "9.09",
+      "image": "books/book_fb36dd72.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 41,
+    "fields": {
+      "title": "Lost Promise in the Dark",
+      "cover": "Hard",
+      "inventory": 20,
+      "daily_fee": "5.92",
+      "image": "books/book_d03732aa.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 42,
+    "fields": {
+      "title": "The Promise of Love",
+      "cover": "Soft",
+      "inventory": 33,
+      "daily_fee": "5.10",
+      "image": "books/book_65a27c68.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 43,
+    "fields": {
+      "title": "Our Journey from the Past",
+      "cover": "Soft",
+      "inventory": 48,
+      "daily_fee": "7.35",
+      "image": "books/book_81c689b9.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 44,
+    "fields": {
+      "title": "Your Book from the Past",
+      "cover": "Soft",
+      "inventory": 46,
+      "daily_fee": "3.45",
+      "image": "books/book_2ddfd9c8.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 45,
+    "fields": {
+      "title": "Our Book of Time",
+      "cover": "Soft",
+      "inventory": 48,
+      "daily_fee": "0.59",
+      "image": "books/book_8a1e5468.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 46,
+    "fields": {
+      "title": "Forgotten Journey of Love",
+      "cover": "Hard",
+      "inventory": 22,
+      "daily_fee": "2.53",
+      "image": "books/book_7a157a29.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 47,
+    "fields": {
+      "title": "Our Mystery from the Past",
+      "cover": "Soft",
+      "inventory": 47,
+      "daily_fee": "6.66",
+      "image": "books/book_92ef7f3d.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 48,
+    "fields": {
+      "title": "Forgotten Story with No Name",
+      "cover": "Soft",
+      "inventory": 28,
+      "daily_fee": "7.05",
+      "image": "books/book_4cd49f3d.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 49,
+    "fields": {
+      "title": "Forgotten Life with No Name",
+      "cover": "Soft",
+      "inventory": 4,
+      "daily_fee": "4.02",
+      "image": "books/book_734eefcb.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 50,
+    "fields": {
+      "title": "Their Journey of War",
+      "cover": "Soft",
+      "inventory": 29,
+      "daily_fee": "9.62",
+      "image": "books/book_32fcf99e.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 51,
+    "fields": {
+      "title": "Your Story with No Name",
+      "cover": "Soft",
+      "inventory": 1,
+      "daily_fee": "6.24",
+      "image": "books/book_69058375.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 52,
+    "fields": {
+      "title": "My Promise of War",
+      "cover": "Hard",
+      "inventory": 25,
+      "daily_fee": "6.65",
+      "image": "books/book_19b6de91.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 53,
+    "fields": {
+      "title": "Their Mystery of Love",
+      "cover": "Soft",
+      "inventory": 45,
+      "daily_fee": "3.97",
+      "image": "books/book_d57f7e50.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 54,
+    "fields": {
+      "title": "My Journey of War",
+      "cover": "Hard",
+      "inventory": 31,
+      "daily_fee": "1.54",
+      "image": "books/book_b9f3687b.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 55,
+    "fields": {
+      "title": "My Promise with No Name",
+      "cover": "Hard",
+      "inventory": 42,
+      "daily_fee": "1.71",
+      "image": "books/book_657a76a6.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 56,
+    "fields": {
+      "title": "The Adventure from the Past",
+      "cover": "Soft",
+      "inventory": 23,
+      "daily_fee": "6.75",
+      "image": "books/book_1176508c.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 57,
+    "fields": {
+      "title": "Their Mystery of Time",
+      "cover": "Hard",
+      "inventory": 42,
+      "daily_fee": "6.02",
+      "image": "books/book_e9a94c26.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 58,
+    "fields": {
+      "title": "A Dream with No Name",
+      "cover": "Hard",
+      "inventory": 14,
+      "daily_fee": "7.92",
+      "image": "books/book_40bb20a7.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 59,
+    "fields": {
+      "title": "Forgotten Adventure of Love",
+      "cover": "Soft",
+      "inventory": 50,
+      "daily_fee": "3.88",
+      "image": "books/book_b7bf11a2.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 60,
+    "fields": {
+      "title": "Our Life of Love",
+      "cover": "Soft",
+      "inventory": 48,
+      "daily_fee": "6.52",
+      "image": "books/book_e79c9845.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 61,
+    "fields": {
+      "title": "Their Adventure with No Name",
+      "cover": "Hard",
+      "inventory": 20,
+      "daily_fee": "1.40",
+      "image": "books/book_07b3c88a.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 62,
+    "fields": {
+      "title": "My Journey from the Past",
+      "cover": "Soft",
+      "inventory": 29,
+      "daily_fee": "2.60",
+      "image": "books/book_75dab734.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 63,
+    "fields": {
+      "title": "Secret Story with No Name",
+      "cover": "Hard",
+      "inventory": 50,
+      "daily_fee": "7.93",
+      "image": "books/book_fe2dc81d.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 64,
+    "fields": {
+      "title": "My Dream of War",
+      "cover": "Soft",
+      "inventory": 35,
+      "daily_fee": "2.13",
+      "image": "books/book_0b8bb855.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 65,
+    "fields": {
+      "title": "Forgotten Promise in the Dark",
+      "cover": "Soft",
+      "inventory": 31,
+      "daily_fee": "1.13",
+      "image": "books/book_b90b16a3.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 66,
+    "fields": {
+      "title": "Your Life of Love",
+      "cover": "Hard",
+      "inventory": 35,
+      "daily_fee": "7.35",
+      "image": "books/book_ca99cd81.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 67,
+    "fields": {
+      "title": "The Dream of Love",
+      "cover": "Hard",
+      "inventory": 6,
+      "daily_fee": "8.65",
+      "image": "books/book_39dfe5e5.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 68,
+    "fields": {
+      "title": "Forgotten Adventure from the Past",
+      "cover": "Hard",
+      "inventory": 31,
+      "daily_fee": "4.51",
+      "image": "books/book_80426da1.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 69,
+    "fields": {
+      "title": "Lost Promise of Love",
+      "cover": "Soft",
+      "inventory": 50,
+      "daily_fee": "2.96",
+      "image": "books/book_41e9e681.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 70,
+    "fields": {
+      "title": "Secret Adventure of Love",
+      "cover": "Hard",
+      "inventory": 43,
+      "daily_fee": "6.63",
+      "image": "books/book_392efd91.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 71,
+    "fields": {
+      "title": "Forgotten Adventure of Time",
+      "cover": "Hard",
+      "inventory": 5,
+      "daily_fee": "5.24",
+      "image": "books/book_bb8a8fcd.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 72,
+    "fields": {
+      "title": "The Book of War",
+      "cover": "Hard",
+      "inventory": 6,
+      "daily_fee": "8.08",
+      "image": "books/book_ad6baebe.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 73,
+    "fields": {
+      "title": "Lost Adventure with No Name",
+      "cover": "Soft",
+      "inventory": 36,
+      "daily_fee": "7.59",
+      "image": "books/book_ac692f99.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 74,
+    "fields": {
+      "title": "Our Adventure of Time",
+      "cover": "Hard",
+      "inventory": 5,
+      "daily_fee": "8.30",
+      "image": "books/book_9f2a5398.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 75,
+    "fields": {
+      "title": "The Journey of War",
+      "cover": "Hard",
+      "inventory": 13,
+      "daily_fee": "6.46",
+      "image": "books/book_e62f0c4d.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 76,
+    "fields": {
+      "title": "A Life in the Dark",
+      "cover": "Hard",
+      "inventory": 37,
+      "daily_fee": "8.03",
+      "image": "books/book_b5df7a4a.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 77,
+    "fields": {
+      "title": "The Book of Time",
+      "cover": "Hard",
+      "inventory": 39,
+      "daily_fee": "3.16",
+      "image": "books/book_84689a31.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 78,
+    "fields": {
+      "title": "Their Adventure from the Past",
+      "cover": "Soft",
+      "inventory": 29,
+      "daily_fee": "8.79",
+      "image": "books/book_efbb8d50.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 79,
+    "fields": {
+      "title": "My Adventure from the Past",
+      "cover": "Hard",
+      "inventory": 11,
+      "daily_fee": "5.91",
+      "image": "books/book_b50f9b8b.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 80,
+    "fields": {
+      "title": "Secret Adventure from the Past",
+      "cover": "Soft",
+      "inventory": 17,
+      "daily_fee": "8.02",
+      "image": "books/book_d188b308.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 81,
+    "fields": {
+      "title": "A Journey with No Name",
+      "cover": "Hard",
+      "inventory": 45,
+      "daily_fee": "6.37",
+      "image": "books/book_d7933bfb.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 82,
+    "fields": {
+      "title": "My Dream from the Past",
+      "cover": "Soft",
+      "inventory": 15,
+      "daily_fee": "7.25",
+      "image": "books/book_822a49af.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 83,
+    "fields": {
+      "title": "Forgotten Promise of War",
+      "cover": "Soft",
+      "inventory": 11,
+      "daily_fee": "8.36",
+      "image": "books/book_5fe9d908.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 84,
+    "fields": {
+      "title": "Their Mystery with No Name",
+      "cover": "Soft",
+      "inventory": 21,
+      "daily_fee": "6.46",
+      "image": "books/book_5d17c689.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 85,
+    "fields": {
+      "title": "A Book with No Name",
+      "cover": "Soft",
+      "inventory": 38,
+      "daily_fee": "2.03",
+      "image": "books/book_4c187a09.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 86,
+    "fields": {
+      "title": "My Book of Time",
+      "cover": "Hard",
+      "inventory": 46,
+      "daily_fee": "8.11",
+      "image": "books/book_bc379212.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 87,
+    "fields": {
+      "title": "Their Journey with No Name",
+      "cover": "Soft",
+      "inventory": 7,
+      "daily_fee": "2.20",
+      "image": "books/book_450d248a.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 88,
+    "fields": {
+      "title": "Your Mystery in the Dark",
+      "cover": "Hard",
+      "inventory": 30,
+      "daily_fee": "1.29",
+      "image": "books/book_201b7725.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 89,
+    "fields": {
+      "title": "Their Adventure of Time",
+      "cover": "Hard",
+      "inventory": 7,
+      "daily_fee": "0.69",
+      "image": "books/book_0918f308.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 90,
+    "fields": {
+      "title": "Secret Journey with No Name",
+      "cover": "Hard",
+      "inventory": 31,
+      "daily_fee": "7.37",
+      "image": "books/book_e3374814.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 91,
+    "fields": {
+      "title": "Their Promise with No Name",
+      "cover": "Hard",
+      "inventory": 35,
+      "daily_fee": "2.26",
+      "image": "books/book_6ea4da3c.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 92,
+    "fields": {
+      "title": "My Dream of War",
+      "cover": "Soft",
+      "inventory": 43,
+      "daily_fee": "5.78",
+      "image": "books/book_0fdd2d82.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 93,
+    "fields": {
+      "title": "Their Story in the Dark",
+      "cover": "Hard",
+      "inventory": 33,
+      "daily_fee": "8.20",
+      "image": "books/book_41eba823.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 94,
+    "fields": {
+      "title": "A Book of Time",
+      "cover": "Soft",
+      "inventory": 46,
+      "daily_fee": "6.58",
+      "image": "books/book_9be049cd.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 95,
+    "fields": {
+      "title": "The Story of War",
+      "cover": "Hard",
+      "inventory": 5,
+      "daily_fee": "2.25",
+      "image": "books/book_fed68eb5.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 96,
+    "fields": {
+      "title": "Forgotten Dream of War",
+      "cover": "Hard",
+      "inventory": 34,
+      "daily_fee": "4.28",
+      "image": "books/book_11beda02.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 97,
+    "fields": {
+      "title": "Your Adventure of Time",
+      "cover": "Soft",
+      "inventory": 19,
+      "daily_fee": "7.22",
+      "image": "books/book_6f452769.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 98,
+    "fields": {
+      "title": "A Adventure with No Name",
+      "cover": "Hard",
+      "inventory": 42,
+      "daily_fee": "7.56",
+      "image": "books/book_95b16219.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 99,
+    "fields": {
+      "title": "Lost Life of Time",
+      "cover": "Hard",
+      "inventory": 15,
+      "daily_fee": "9.45",
+      "image": "books/book_76c3b43a.jpg"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 100,
+    "fields": {
+      "title": "Secret Dream in the Dark",
+      "cover": "Hard",
+      "inventory": 12,
+      "daily_fee": "4.88",
+      "image": "books/book_a4acbb5e.jpg"
+    }
+  }
+]

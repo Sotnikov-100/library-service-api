@@ -269,4 +269,11 @@ pyrightconfig.json
 
 *.rdb
 
+### Ignore Static Files ###
+/files/
+
 # End of https://www.toptal.com/developers/gitignore/api/django,python,redis
+
+# Vinohradov Volodymyr irnores
+pyproject.toml
+/config/.env.local
