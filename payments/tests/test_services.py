@@ -1,6 +1,9 @@
 from django.test import TestCase, RequestFactory
 from unittest.mock import patch
-from payments.services import create_stripe_session, send_telegram_notification
+
+from notifications.telegram_bot import TelegramNotificationService
+from payments import services
+from payments.services import create_stripe_session
 from payments.models import Payment
 from borrowings.models import Borrowing
 from books.models import Book
@@ -30,6 +33,7 @@ class PaymentServicesTests(TestCase):
             session_id="sess_123",
             money_to_pay=100,
         )
+        self.service = TelegramNotificationService()
 
     @patch("stripe.checkout.Session.create")
     def test_create_stripe_session(self, mock_stripe):
@@ -46,11 +50,15 @@ class PaymentServicesTests(TestCase):
 
     @patch("requests.post")
     def test_telegram_notification(self, mock_post):
-        send_telegram_notification(self.payment)
         mock_post.assert_called_once()
+        self.service.send("test message", 12345)
+        mock_post.assert_called_with(
+            "https://api.telegram.org/bot12345/sendMessage",
+            data={"chat_id": 12345, "text": "test message"},
+        )
 
     @patch("requests.post")
     def test_telegram_notification_failure(self, mock_post):
         mock_post.side_effect = Exception("API Error")
         with self.assertRaises(Exception):
-            send_telegram_notification(self.payment)
+            self.service.send("test message", 12345)

@@ -9,7 +9,6 @@ from base.generics import CreateAPIView
 from base.viewsets import ModelViewSet
 from config.settings import TELEGRAM_BOT_NAME
 from tgaccounts.docs import(
-    get_create_tg_account_schema,
     get_retrieve_tg_account_schema,
     get_tg_link_schema
 )
@@ -36,7 +35,7 @@ class TgBotLinkView(APIView):
 class TelegramAccountViewSet(ModelViewSet):
     """
     ViewSet for managing the authenticated user's Telegram account.
-    Only authenticated users can access.
+    Only authenticated users can access it.
     """
 
     queryset = TelegramAccount.objects.prefetch_related("user")

@@ -127,7 +127,7 @@ async def handle_email_input(update: Update, context: ContextTypes.DEFAULT_TYPE)
     try:
         # Checking by Celery
         result = check_user_exists_task.delay(email)
-        user_info = result.get(timeout=5)  # waiting 5 seconds for result
+        user_info = result.get(timeout=5)  # waiting 5 seconds for a result
 
         if not user_info.get("exists"):
             await update.message.reply_text(

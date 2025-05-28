@@ -1,4 +1,3 @@
-import asyncio
 import logging
 
 from celery import shared_task
@@ -6,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 
 from notifications.models import Notification
-from notifications.telegram_bot import TelegramNotification, TelegramNotificationService
+from notifications.telegram_bot import TelegramNotificationService
 from tgaccounts.models import TelegramAccount
 
 logger = logging.getLogger(__name__)
@@ -15,7 +14,7 @@ User = get_user_model()
 
 @shared_task
 def check_telegram_account_task(chat_id):
-    """Check if Telegram account exists."""
+    """Check if a Telegram account exists."""
     try:
         account = TelegramAccount.objects.get(chat_id=chat_id)
         return {"exists": True, "username": account.user.username or account.user.email}
@@ -56,13 +55,9 @@ def send_notification_task(self, notification_id):
 
 
 @shared_task
-def send_notification_to_all_users(message, chat_id=None):
-    """Send broadcast message to all users with Telegram accounts."""
+def send_notification_to_all_users(message):
+    """Send a broadcast message to all users with Telegram accounts."""
     service = TelegramNotificationService()
-    if chat_id:
-        user_id = User.objects.filter(is_staff=True).values_list('id', flat=True).first()
-        service.send(message=message, chat_id=chat_id)
-        Notification.objects.create(user_id=user_id, message=message, is_sent=True)
     try:
         users = User.objects.filter(telegram_account__isnull=False)
         notification_count = 0
@@ -85,7 +80,7 @@ def send_notification_to_all_users(message, chat_id=None):
 
 @shared_task(bind=True, max_retries=3)
 def create_telegram_account_task(self, email, chat_id):
-    """Create Telegram account for user."""
+    """Create Telegram an account for user."""
     service = TelegramNotificationService()
     try:
         with transaction.atomic():
@@ -102,12 +97,12 @@ def create_telegram_account_task(self, email, chat_id):
                 return False
 
             if TelegramAccount.objects.filter(chat_id=chat_id).exists():
-                # Send notification directly for already linked account
+                # Send notification directly for an already linked account
                 message = "⚠️ This Telegram account is already linked to another user."
                 service.send(message=message, chat_id=chat_id)
                 return False
 
-            # Create account and let signal handle the notification
+            # Create an account and let signal handle the notification
             TelegramAccount.objects.create(user=user, chat_id=chat_id)
             return True
     except Exception as e:
@@ -117,7 +112,7 @@ def create_telegram_account_task(self, email, chat_id):
 
 @shared_task(bind=True, max_retries=3)
 def delete_telegram_account_task(self, chat_id):
-    """Delete Telegram account."""
+    """Delete Telegram an account."""
     service = TelegramNotificationService()
     try:
         with transaction.atomic():
@@ -163,7 +158,7 @@ def create_notification_task(user_id, message):
             chat_id=user.telegram_account.chat_id,
         )
 
-        # Only create notification record if message was sent
+        # Only create a notification record if a message was sent
         if success:
             Notification.objects.create(user=user, message=message, is_sent=True)
             return True
@@ -175,7 +170,7 @@ def create_notification_task(user_id, message):
 
 @shared_task
 def check_user_exists_task(email):
-    """Check if user exists by email."""
+    """Check if a user exists by email."""
     try:
         user = User.objects.get(email=email)
         return {"exists": True, "username": user.username or user.email}
@@ -187,7 +182,7 @@ def check_user_exists_task(email):
 
 
 @shared_task
-def cleanup_old_notifications():
+def cleanup_old_notifications(days: int = None):
     """Remove notifications older than 30 days."""
     try:
         from datetime import timedelta
@@ -195,7 +190,7 @@ def cleanup_old_notifications():
         from django.utils import timezone
 
         # Delete notifications older than 30 days
-        old_date = timezone.now() - timedelta(days=30)
+        old_date = timezone.now() - timedelta(days=days or 30)
         deleted_count = Notification.objects.filter(created_at__lt=old_date).delete()[0]
         return deleted_count
     except Exception as e:
